@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>FIP</title><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean" /><script src="haddock-util.js" type="text/javascript"></script><script type="text/javascript">//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_FIP.html");};
+//]]>
+</script></head><body><div id="package-header"><ul class="links" id="page-menu"><li><a href="index.html">Contents</a></li><li><a href="doc-index.html">Index</a></li></ul><p class="caption" class="empty">&nbsp;</p></div><div id="content"><div id="module-header"><p class="caption">FIP</p></div><div id="description"><p class="caption">Description</p><div class="doc"><p>This is the primary Module for Functional Image Processing Course
+ | Developed by Andrew Kordik for
+ | the University of Dayton
+ | All Rights Reserved
+ | This library is still highly volitile.
+ | The goal is to provide an interface to 
+ | Discrete Signal Processing with a Functional Approach
+ | by leveraging Haskell and demonstraiting it through
+ | an image processing libarary, which means we are
+ | using two dimentional signal spaces
+</p></div></div><div id="synopsis"><p id="control.syn" class="caption expander" onclick="toggleSection('syn')">Synopsis</p><ul id="section.syn" class="hide" onclick="toggleSection('syn')"><li class="src short"><span class="keyword">data</span>  <a href="#t:Image">Image</a> i e = <a href="#v:Image">Image</a> {<ul class="subs"><li><a href="#v:width">width</a> :: Int</li><li><a href="#v:height">height</a> :: Int</li><li><a href="#v:red">red</a> :: Array i e</li><li><a href="#v:green">green</a> :: Array i e</li><li><a href="#v:blue">blue</a> :: Array i e</li><li><a href="#v:alpha">alpha</a> :: Array i e</li></ul>}</li><li class="src short"><span class="keyword">class</span>  <a href="#t:ValueMappable">ValueMappable</a> a  <span class="keyword">where</span><ul class="subs"><li><a href="#v:valueMap">valueMap</a> ::  (Array (Int, Int) a -&gt; Array (Int, Int) b) -&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) a -&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) b</li></ul></li><li class="src short"><span class="keyword">class</span>  <a href="#t:IndexMappable">IndexMappable</a> a  <span class="keyword">where</span><ul class="subs"><li><a href="#v:indexMap">indexMap</a> ::  (Int -&gt; Int) -&gt; (Int -&gt; Int) -&gt; (Array (Int, Int) a -&gt; Array (Int, Int) b) -&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) a -&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) b</li></ul></li><li class="src short"><a href="#v:applyWindow">applyWindow</a> :: (RealFrac a, Integral a1, Integral e) =&gt; Array (Int, Int) a -&gt; Array (Int, Int) a1 -&gt; Array (Int, Int) e</li><li class="src short"><a href="#v:loadImage">loadImage</a> :: String -&gt; IO (Maybe (<a href="FIP.html#t:Image">Image</a> (Int, Int) Word8))</li><li class="src short"><a href="#v:writeImage">writeImage</a> :: String -&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) Word8 -&gt; IO ()</li><li class="src short"><a href="#v:getWidthAndHeight">getWidthAndHeight</a> :: ((Int, Int), (Int, Int)) -&gt; (Int, Int)</li><li class="src short"><a href="#v:loadBitmap">loadBitmap</a> :: String -&gt; IO (Maybe BMP)</li><li class="src short"><a href="#v:bmpToImage">bmpToImage</a> :: BMP -&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) Word8</li><li class="src short"><a href="#v:imageToBmp">imageToBmp</a> :: <a href="FIP.html#t:Image">Image</a> (Int, Int) Word8 -&gt; BMP</li><li class="src short"><a href="#v:arrayToByteString">arrayToByteString</a> :: (Ix t2, Ix t1, Num t1, Num t2, Enum t1, Enum t2) =&gt; Array (t1, t2) t -&gt; t1 -&gt; t2 -&gt; [t]</li><li class="src short"><a href="#v:combineComponents">combineComponents</a> ::  [a] -&gt; [a] -&gt; [a] -&gt; [a] -&gt; [a]</li><li class="src short"><a href="#v:byteStringToArray">byteStringToArray</a> :: ByteString -&gt; Int -&gt; Int -&gt; Array (Int, Int) Word8</li><li class="src short"><a href="#v:getOnlyRed">getOnlyRed</a> ::  [a] -&gt; [a]</li><li class="src short"><a href="#v:getOnlyGreen">getOnlyGreen</a> ::  [a] -&gt; [a]</li><li class="src short"><a href="#v:getOnlyBlue">getOnlyBlue</a> ::  [a] -&gt; [a]</li><li class="src short"><a href="#v:getOnlyAlpha">getOnlyAlpha</a> ::  [a] -&gt; [a]</li></ul></div><div id="interface"><h1>Documentation</h1><div class="top"><p class="src"><span class="keyword">data</span>  <a name="t:Image" class="def">Image</a> i e </p><div class="doc"><p>This is the core type of the library, each component of the
+ image is stored as an Array of Word8s
+</p></div><div class="subs constructors"><p class="caption">Constructors</p><table><tr><td class="src"><a name="v:Image" class="def">Image</a></td><td class="doc empty">&nbsp;</td></tr><tr><td colspan="2"><div class="subs fields"><p class="caption">Fields</p><dl><dt class="src"><a name="v:width" class="def">width</a> :: Int</dt><dd class="doc"><p>Width in pixels of the image
+</p></dd><dt class="src"><a name="v:height" class="def">height</a> :: Int</dt><dd class="doc"><p>Height in pixels of the image                       
+</p></dd><dt class="src"><a name="v:red" class="def">red</a> :: Array i e</dt><dd class="doc"><p>The Red pixel Values of the image                       
+</p></dd><dt class="src"><a name="v:green" class="def">green</a> :: Array i e</dt><dd class="doc"><p>The Green pixel values of the image
+</p></dd><dt class="src"><a name="v:blue" class="def">blue</a> :: Array i e</dt><dd class="doc"><p>The Blue pixel values of the image
+</p></dd><dt class="src"><a name="v:alpha" class="def">alpha</a> :: Array i e</dt><dd class="doc"><p>The Alpha pixel values of the image
+</p></dd></dl><div class="clear"></div></div></td></tr></table></div><div class="subs instances"><p id="control.i:Image" class="caption collapser" onclick="toggleSection('i:Image')">Instances</p><div id="section.i:Image" class="show"><table><tr><td class="src">Functor (<a href="FIP.html#t:Image">Image</a> (Int, Int))</td><td class="doc"><p>This is never used however it should have been
+</p></td></tr></table></div></div></div><div class="top"><p class="src"><span class="keyword">class</span>  <a name="t:ValueMappable" class="def">ValueMappable</a> a  <span class="keyword">where</span></p><div class="doc"><p>The Type-Class ValueMappable manipulates Arrays without changing thier dimensions.
+ | There is no checking to ensure that this is maintained.  
+</p></div><div class="subs methods"><p class="caption">Methods</p><p class="src"><a name="v:valueMap" class="def">valueMap</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: (Array (Int, Int) a -&gt; Array (Int, Int) b)</td><td class="doc"><p>A Function that can manipulate a 2-D Array
+</p></td></tr><tr><td class="src">-&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) a</td><td class="doc"><p>The input Image
+</p></td></tr><tr><td class="src">-&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) b</td><td class="doc"><p>The output Image
+</p></td></tr></table></div></div><div class="subs instances"><p id="control.i:ValueMappable" class="caption collapser" onclick="toggleSection('i:ValueMappable')">Instances</p><div id="section.i:ValueMappable" class="show"><table><tr><td class="src"><a href="FIP.html#t:ValueMappable">ValueMappable</a> a</td><td class="doc"><p>Changes the Values in the components of an Image without changing their dimensions.
+ | Each component is changed in the same way
+</p></td></tr></table></div></div></div><div class="top"><p class="src"><span class="keyword">class</span>  <a name="t:IndexMappable" class="def">IndexMappable</a> a  <span class="keyword">where</span></p><div class="doc"><p>The Type-Class IndexMappable maniplates Arrays and may-or-maynot change their dimenions.
+ | There is no checking to ensure that the dimension changes are the same as the changes to the array
+</p></div><div class="subs methods"><p class="caption">Methods</p><p class="src"><a name="v:indexMap" class="def">indexMap</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: (Int -&gt; Int)</td><td class="doc"><p>A Function that changes the width of the image
+</p></td></tr><tr><td class="src">-&gt; (Int -&gt; Int)</td><td class="doc"><p>A Function that changes the height of the image
+</p></td></tr><tr><td class="src">-&gt; (Array (Int, Int) a -&gt; Array (Int, Int) b)</td><td class="doc"><p>A Function that manipulates a 2-D Array
+</p></td></tr><tr><td class="src">-&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) a</td><td class="doc"><p>The input Image
+</p></td></tr><tr><td class="src">-&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) b</td><td class="doc"><p>The output Image
+</p></td></tr></table></div></div><div class="subs instances"><p id="control.i:IndexMappable" class="caption collapser" onclick="toggleSection('i:IndexMappable')">Instances</p><div id="section.i:IndexMappable" class="show"><table><tr><td class="src"><a href="FIP.html#t:IndexMappable">IndexMappable</a> a</td><td class="doc"><p>Changes the Values in the components of an Image and changes the dimensions of the image
+ | Each component is changed in the same way
+</p></td></tr></table></div></div></div><div class="top"><p class="src"><a name="v:applyWindow" class="def">applyWindow</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: (RealFrac a, Integral a1, Integral e)</td><td class="doc empty">&nbsp;</td></tr><tr><td class="src">=&gt; Array (Int, Int) a</td><td class="doc empty">&nbsp;</td></tr><tr><td class="src">-&gt; Array (Int, Int) a1</td><td class="doc empty">&nbsp;</td></tr><tr><td class="src">-&gt; Array (Int, Int) e</td><td class="doc empty">&nbsp;</td></tr></table></div><div class="doc"><p>applyWindow takes a 2-D array that contains the filter values.  This
+ | is synonmous with a Window filter common in Image Processing Algorithms.
+ | The Window Filter is applied as a sum of products on an element my element 
+ | basis.  First some basic information about the Array being processed (imageArray)
+ | and the window being applied (window) are gathered (i.e. width and height).
+ | Next the imageArray is padded with zeros.  This is common but not required by
+ | Windowing techniques.  The padding is accomplished by extending the image Array
+ | in all directions, such that the values are at the same index as the original,
+ | In other words, that is the padding data actually exists at indicies below zero
+</p></div></div><div class="top"><p class="src"><a name="v:loadImage" class="def">loadImage</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: String</td><td class="doc"><p>Input filename of a Bitmap Image with extension
+</p></td></tr><tr><td class="src">-&gt; IO (Maybe (<a href="FIP.html#t:Image">Image</a> (Int, Int) Word8))</td><td class="doc"><p>Loaded Image
+</p></td></tr></table></div><div class="doc"><p>loadImage takes a filename including the extension of a 32bit
+   Bitmap image and returns an Image wrapped in a Maybe and IO monad
+   If the load fails, An Error is Printed and the function returns IO (Nothing)
+   Otherwise it returns IO( Just Image (Int,Int) Word8))
+</p></div></div><div class="top"><p class="src"><a name="v:writeImage" class="def">writeImage</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: String</td><td class="doc"><p>The Desired output filename
+</p></td></tr><tr><td class="src">-&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) Word8</td><td class="doc"><p>The Image data to be written as a Bitmap
+</p></td></tr><tr><td class="src">-&gt; IO ()</td><td class="doc"><p>Empty IO Monad
+</p></td></tr></table></div><div class="doc"><p>writeImage takes a file name and an image to be written as a 32-bit
+ | Bitmap Image
+</p></div></div><div class="top"><p class="src"><a name="v:getWidthAndHeight" class="def">getWidthAndHeight</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: ((Int, Int), (Int, Int))</td><td class="doc"><p>((wStart, hStart), (wEnd, hEnd))
+</p></td></tr><tr><td class="src">-&gt; (Int, Int)</td><td class="doc"><p>(width, height)
+</p></td></tr></table></div><div class="doc"><p>Extracts width and height from a bounds representation
+</p></div></div><div class="top"><p class="src"><a name="v:loadBitmap" class="def">loadBitmap</a> :: String -&gt; IO (Maybe BMP)</p><div class="doc"><p>loadBitmap : Loads a 24 or 32 bit BMP.
+  This obviously requires that the image 
+  is stored in a Color Bitmap file.
+</p></div></div><div class="top"><p class="src"><a name="v:bmpToImage" class="def">bmpToImage</a> :: BMP -&gt; <a href="FIP.html#t:Image">Image</a> (Int, Int) Word8</p><div class="doc"><p>This takes an a BMP type and coverts it to an Image type
+ so that it can be worked with
+</p></div></div><div class="top"><p class="src"><a name="v:imageToBmp" class="def">imageToBmp</a> :: <a href="FIP.html#t:Image">Image</a> (Int, Int) Word8 -&gt; BMP</p><div class="doc"><p>imageToBmp takes the custom image type and puts it into a
+   32bit RGBA Bitmap
+</p></div></div><div class="top"><p class="src"><a name="v:arrayToByteString" class="def">arrayToByteString</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: (Ix t2, Ix t1, Num t1, Num t2, Enum t1, Enum t2)</td><td class="doc empty">&nbsp;</td></tr><tr><td class="src">=&gt; Array (t1, t2) t</td><td class="doc"><p>a 2-D Array indexed from 0 
+</p></td></tr><tr><td class="src">-&gt; t1</td><td class="doc"><p>the width in pixels / array elements
+</p></td></tr><tr><td class="src">-&gt; t2</td><td class="doc"><p>the height in pixels / array elements
+</p></td></tr><tr><td class="src">-&gt; [t]</td><td class="doc"><p>a 1 dimentional list in raster order of all pixels/elements
+</p></td></tr></table></div><div class="doc"><p>arrayToByteString takes a 2-D array and moves it to a 1-D list
+   so that it can be packed into a bytestring
+</p></div></div><div class="top"><p class="src"><a name="v:combineComponents" class="def">combineComponents</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: [a]</td><td class="doc"><p>An array of Red components only
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>An array of Green components only
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>An array of Blue components only
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>An array of Alpha components only
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>An array of All components in raster order RGBA
+</p></td></tr></table></div><div class="doc"><p>combineComponents takes arrays containing a single component 
+   and aggregates them into a single multiple component array in Raster order (RGBA)
+</p></div></div><div class="top"><p class="src"><a name="v:byteStringToArray" class="def">byteStringToArray</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: ByteString</td><td class="doc"><p>A Single compnent bytestring
+</p></td></tr><tr><td class="src">-&gt; Int</td><td class="doc"><p>Width in Pixels
+</p></td></tr><tr><td class="src">-&gt; Int</td><td class="doc"><p>Height in Pixels
+</p></td></tr><tr><td class="src">-&gt; Array (Int, Int) Word8</td><td class="doc"><p>2-d Array containing a single component
+</p></td></tr></table></div><div class="doc"><p>byteStringToArray is takes a ByteString 
+  and converts it to a 2-d array of the appropriate width and height.
+  Arrays are indexed from 0,0 to width-1, height-1
+</p></div></div><div class="top"><p class="src"><a name="v:getOnlyRed" class="def">getOnlyRed</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: [a]</td><td class="doc"><p>A List containing RGBA data
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>A List containing only Red data
+</p></td></tr></table></div><div class="doc"><p>Puts only the red components into a standalone array
+</p></div></div><div class="top"><p class="src"><a name="v:getOnlyGreen" class="def">getOnlyGreen</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: [a]</td><td class="doc"><p>A List containing RGBA data
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>A List containing only Green data
+</p></td></tr></table></div><div class="doc"><p>Puts only the Green components into a standalone array
+</p></div></div><div class="top"><p class="src"><a name="v:getOnlyBlue" class="def">getOnlyBlue</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: [a]</td><td class="doc"><p>A List containing RGBA data
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>A List containing only Blue data
+</p></td></tr></table></div><div class="doc"><p>Puts only the Blue components into a standalone array
+</p></div></div><div class="top"><p class="src"><a name="v:getOnlyAlpha" class="def">getOnlyAlpha</a></p><div class="subs arguments"><p class="caption">Arguments</p><table><tr><td class="src">:: [a]</td><td class="doc"><p>A List containing RGBA data
+</p></td></tr><tr><td class="src">-&gt; [a]</td><td class="doc"><p>A List containing only Alpha data
+</p></td></tr></table></div><div class="doc"><p>Puts only the Alpha components into a standalone array
+</p></div></div></div></div><div id="footer"><p>Produced by <a href="http://www.haskell.org/haddock/">Haddock</a> version 2.9.2</p></div></body></html>
