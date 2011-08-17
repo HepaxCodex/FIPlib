@@ -11,7 +11,7 @@
 -- | by leveraging Haskell and demonstraiting it through
 -- | an image processing libarary, which means we are
 -- | using two dimentional signal spaces
-module FIP
+module FIPlib.Core
        (Image, 
         loadImage,
         writeImage,
