@@ -11,11 +11,28 @@
 
 
 
-import FIP
+import FIPlib.Core
+import FIPlib.Filters
 import Data.Array
 import Data.Word
+import Criterion.Main
 
 
+main = 
+  defaultMain
+    [bench "warmup" $ whnf putStrLn "Hello World",
+     bench "smoothingDemo" $ smoothingDemo]
+    
+filterTest = 
+  do inputImage <- loadImage "lena.bmp"
+     case inputImage of
+       Nothing -> putStrLn "Failed to Load Image"
+       Just myImage -> let window = gaussian 3 3 1
+                       in let resultImage = valueMap  
+                                            (applyWindow window)
+                                            myImage
+                          in writeImage "smoothingDemo.bmp" resultImage
+  
 
 
 {--
@@ -25,7 +42,15 @@ testWindow =
   in applyWindow window imageArray
      
  --}  
-   
+  
+sharpeningDemo =
+  do inputImage <- loadImage "lena.bmp"
+     case inputImage of 
+       Nothing -> putStrLn "Failed to Load Image"
+       Just myImage -> let resultImage = unSharpMask 1 myImage
+                       in writeImage "sharpeningDemo.bmp" resultImage
+     
+     
 smoothingDemo = 
   do inputImage <- loadImage "lena.bmp"
      case inputImage of

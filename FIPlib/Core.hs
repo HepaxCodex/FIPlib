@@ -140,6 +140,81 @@ instance Functor (Image (Int, Int) ) where
       }
 
 
+{--
+instance (Eq a) => Eq (Image (Int, Int) a) where
+  (==) fstImage sndImage = 
+    if ( (width fstImage) == (width sndImage) &&
+         (height fstImage) == (height sndImage) &&
+         (red fstImage) == (red sndImage) &&
+         (green fstImage) == (green sndImage) &&
+         (blue fstImage) == (blue sndImage) &&
+         (alpha fstImage) == (alpha sndImage) )
+    then True
+    else False
+
+instance (Show a) => Show (Image (Int, Int) a) where
+ show myImage = 
+   "Width: " 
+         --}
+         
+
+-- instance (Num a) => Num (Image (Int, Int) a) where
+  
+class Addable a where
+  (+) ::  Image (Int, Int) a -- ^ The first input Image
+         -> Image (Int, Int) b -- ^ The second input  Image
+         -> Image (Int, Int) c -- ^ The second input  Image
+         
+instance Addable (Image (Int, Int) a) where
+  (+) fstImage sndImage = 
+    let mw = width fstImage
+        mh = height fstImage
+        mr = red fstImage
+        mg = green fstImage
+        mb = blue fstImage
+        ma = alpha fstImage
+    in Image {
+      width = mw,
+      height = mh,
+      red = array ((0,0), (mw,mh)) [((i,j), (red fstImage) ! (i,j) + (red sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]],
+      green = array ((0,0), (mw,mh)) [((i,j), (green fstImage) ! (i,j) + (green sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]],
+      blue = array ((0,0), (mw,mh)) [((i,j), (blue fstImage) ! (i,j) + (blue sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]],
+      alpha = array ((0,0), (mw,mh)) [((i,j), (alpha fstImage) ! (i,j) + (alpha sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]]
+      }
+  
+class Subtractable a where
+  (-) :: Image (Int, Int) a -- ^ The first input Image
+         -> Image (Int, Int) b -- ^ The second input  Image
+         -> Image (Int, Int) c -- ^ The second input  Image
+  
+
+instance Subtractable (Image (Int, Int) a) where
+  (-) fstImage sndImage = 
+    let mw = width fstImage
+        mh = height fstImage
+        mr = red fstImage
+        mg = green fstImage
+        mb = blue fstImage
+        ma = alpha fstImage
+    in Image {
+      width = mw,
+      height = mh,
+      red = array ((0,0), (mw,mh)) [((i,j), (red fstImage) ! (i,j) - (red sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]],
+      green = array ((0,0), (mw,mh)) [((i,j), (green fstImage) ! (i,j) - (green sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]],
+      blue = array ((0,0), (mw,mh)) [((i,j), (blue fstImage) ! (i,j) - (blue sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]],
+      alpha = array ((0,0), (mw,mh)) [((i,j), (alpha fstImage) ! (i,j) - (alpha sndImage) ! (i,j)) | i <- [0..mw], j<- [0..mh]]
+      }
+
+
+
+
+-- (-)
+  -- (*)
+  -- abs
+  -- signum
+  -- fromInteger
+
+--}
 
 
 -- | applyWindow takes a 2-D array that contains the filter values.  This
