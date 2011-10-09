@@ -94,10 +94,10 @@ gaussian width height sigma =
 -- Sharpening Filters -- 
 ------------------------
 
-unSharpMask weight inputImage = 
-  let filter = gaussian 3 3 1
-      blurredImage = valueMap
-                     (applyWindow filter)
-                     inputImage
-      mask = inputImage - blurredImage
-  in inputImage + weight * mask
+--unSharpMask weight inputImage = 
+--  let filter = gaussian 3 3 1
+--      blurredImage = valueMap
+--                     (applyWindow filter)
+--                     inputImage
+--      mask = inputImage - blurredImage
+--  in inputImage + weight * mask

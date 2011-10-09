@@ -43,12 +43,12 @@ testWindow =
      
  --}  
   
-sharpeningDemo =
-  do inputImage <- loadImage "lena.bmp"
-     case inputImage of 
-       Nothing -> putStrLn "Failed to Load Image"
-       Just myImage -> let resultImage = unSharpMask 1 myImage
-                       in writeImage "sharpeningDemo.bmp" resultImage
+--sharpeningDemo =
+--  do inputImage <- loadImage "lena.bmp"
+--     case inputImage of 
+--       Nothing -> putStrLn "Failed to Load Image"
+--       Just myImage -> let resultImage = unSharpMask 1 myImage
+--                       in writeImage "sharpeningDemo.bmp" resultImage
      
      
 smoothingDemo = 
