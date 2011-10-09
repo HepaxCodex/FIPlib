@@ -1,0 +1,1 @@
+haddock *.hs --ignore-all-exports -h -o doc
