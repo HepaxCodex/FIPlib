@@ -33,8 +33,27 @@ filterTest =
                                             myImage
                           in writeImage "smoothingDemo.bmp" resultImage
   
+benchMarkFilter =
+  do inputImage <- loadImage "lena.bmp"
+     case inputImage of
+       Nothing -> putStrLn "Failed to Load Image"
+       Just myImage -> let gausWindow = gaussian 3 3 1
+                           avgWindow = arithmeticMean 3 3 
+                       in defaultMain
+                            [bench "warmup(whnf)" $ whnf putStrLn "HelloWorld",
+                             bench "Filter gauss" $ whnf (benchFilter myImage) gausWindow,
+                             bench "Filter avg" $ whnf (benchFilter myImage) avgWindow,
+                             bench "Two Filters avg -> gauss" $ whnf (benchTwoFilters myImage gausWindow) avgWindow,
+                             bench "Three Filters avg -> avg -> gauss" $ whnf (benchThreeFilters myImage gausWindow avgWindow) avgWindow]
+    
+    
+benchFilter image filter = valueMap (applyWindow filter) image 
 
+benchTwoFilters image filter1 filter2 = valueMap (applyWindow filter1) (valueMap (applyWindow filter2) image)
 
+benchThreeFilters image filter1 filter2 filter3 =
+  valueMap (applyWindow filter1) (valueMap (applyWindow filter2) (valueMap (applyWindow filter3) image))
+  
 {--
 testWindow = 
   let window = array ((-2,-2),(2,2)) [((i,j),(1 / 25)) | i <- [-2..2], j <- [-2..2]] -- Param 
