@@ -1,9 +1,11 @@
 #! /bin/bash
 
-all:
+all: $(clean)
 	ghc -O2 --make TestDemos.hs 
-	#echo -e "Use \"make doc\" to make the FIPlib Documentation"
+	@echo "Use \"make doc\" to make the FIPlib Documentation"
 
+dump: $(clean)
+	ghc -O2 --make -ddump-simpl TestDemos.hs > dump.txt
 
 doc:
 	haddock FIPlib/*.hs --ignore-all-exports -h -o FIPlib/doc
