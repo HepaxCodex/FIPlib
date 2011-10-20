@@ -1,8 +1,8 @@
 #! /bin/bash
 
 all:
-	ghc -O2 --make TestDemos.hs -v
-	echo -e "Use \"make doc\" to make the FIPlib Documentation"
+	ghc -O2 --make TestDemos.hs 
+	#echo -e "Use \"make doc\" to make the FIPlib Documentation"
 
 
 doc:

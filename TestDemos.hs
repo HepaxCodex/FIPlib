@@ -18,7 +18,7 @@ import Data.Word
 import Criterion.Main
 
 
-main = benchMarkFilter
+main = benchMarkFilterNoIO
 --  defaultMain
 --    [bench "warmup" $ whnf putStrLn "Hello World",
 --     bench "smoothingDemo" $ smoothingDemo]
@@ -32,7 +32,22 @@ filterTest =
                                             (applyWindow window)
                                             myImage
                           in writeImage "smoothingDemo.bmp" resultImage
-  
+benchMarkFilterNoIO = 
+  do thumbImage <- loadImage "ThumbnailDemo.bmp"
+     case thumbImage of
+       Nothing -> putStrLn "Failed to Load ThumbnailDemo Image"
+       Just thumb -> let gaussWindow = gaussian 3 3 1
+                         avgWindow  = arithmeticMean 3 3
+                     in defaultMain                        
+                        [bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
+                         bench "GaussWindow (whnf)"     $ whnfIO $ doGauss thumb,
+                         bench "Avg Window (whnf)"      $ whnfIO $ doAvg thumb,
+                         bench "AvgGauss Window (whnf)" $ whnfIO $ doAvgGauss thumb]
+
+doGauss image    = writeImage "doGauss.bmp"    $ valueMap (applyWindow (gaussian 3 3 1)) image
+doAvg image      = writeImage "doAvg.bmp"          $ valueMap ( applyWindow (arithmeticMean 3 3 )) image
+doAvgGauss image = writeImage "doAvgGauss.bmp" $ valueMap ( applyWindow (gaussian 3 3 1 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
+
 benchMarkFilter =
   do lenaImage <- loadImage "lena.bmp" -- lena.bmp ThumbnialDemo.bmp
      thumbImage <- loadImage "ThumbnailDemo.bmp" 
@@ -52,7 +67,7 @@ benchMarkFilter =
                              bench "Avg -> Gauss nfIO thumb" $ nfIO  (writeImage "AvgGaussnfIOthumb.bmp" (benchTwoFilters thumb gausWindow avgWindow)),
                              bench "Gauss whnfIO lena" $ whnfIO (writeImage "GuasswhnfIOlena.bmp" (benchFilter lena gausWindow)), 
                              bench "Avg whnfIO lena" $ whnfIO   (writeImage "AvgwhnfIOlena.bmp"  (benchFilter lena avgWindow)),
-                             bench "Avg -> Gauss whnfIO lena" $ whnfIO  (writeImage "AvgGausswhnfIOlena.bmp" (benchTwoFilters lena gausWindow avgWindow)),
+                             bench "Avg -> Gauss whnfIO lena" $ whnfIO  (writeImage "AvgGausswhnfIOlena.bmp" (benchTwoFilters thumb  gausWindow avgWindow)),
                              bench "Gauss whnfIO thumb" $ whnfIO (writeImage "GuassnfIOthumb.bmp" (benchFilter thumb gausWindow)), 
                              bench "Avg whnfIO thumb" $ whnfIO   (writeImage "AvgnfIOthumb.bmp"  (benchFilter thumb avgWindow)),
                              bench "Avg -> Gauss whnfIO thumb" $ whnfIO  (writeImage "AvgGausswhnfIOthumb.bmp" (benchTwoFilters thumb gausWindow avgWindow))]
