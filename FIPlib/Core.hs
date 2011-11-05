@@ -95,14 +95,13 @@ instance ValueMappable a where
         mg = green myImage
         mb = blue myImage
         ma = alpha myImage
-    in Image {
-      width = mw,
-      height = mh,
-      red = (f mr),
-      green = (f mg),
-      blue = (f mb),
-      alpha = (f ma)
-      }
+    in Image {width  = mw
+             ,height = mh
+             ,red    = f mr
+             ,green  = f mg
+             ,blue   = f mb
+             ,alpha  = f ma
+             }
 
 
 -- | Changes the Values in the components of an Image and changes the dimensions of the image
@@ -115,14 +114,13 @@ instance IndexMappable a where
         mg = green myImage
         mb = blue myImage
         ma = alpha myImage
-    in Image {
-      width = fw mw,
-      height = fh mh,
-      red = (farr mr),
-      green = (farr mg),
-      blue = (farr mb),
-      alpha = (farr ma)
-      }
+    in Image {width  = fw mw
+             ,height = fh mh
+             ,red    = farr mr
+             ,green  = farr mg
+             ,blue   = farr mb
+             ,alpha  = farr ma
+             }
 
 
 -- | This is never used however it should have been
@@ -134,14 +132,13 @@ instance Functor (Image (Int, Int) ) where
         mg = green myImage
         mb = blue myImage
         ma = alpha myImage
-    in Image {
-      width = mw,
-      height = mh,
-      red = (fmap f mr),
-      green = (fmap f mg),
-      blue = (fmap f mb),
-      alpha = (fmap f ma)
-      }
+    in Image {width  = mw
+             ,height = mh
+             ,red    = fmap f mr
+             ,green  = fmap f mg
+             ,blue   = fmap f mb
+             ,alpha  = fmap f ma
+             }
 
 
          
