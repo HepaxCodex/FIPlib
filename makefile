@@ -9,7 +9,7 @@ dump:
 	make clean
 	ghc -O2 --make -ddump-simpl-stats TestDemos.hs > dump.txt
 
-doc:
+doc: FIPlib/Core.hs FIPlib/Filters.hs
 	haddock FIPlib/*.hs --ignore-all-exports -h -o FIPlib/doc
 
 clean:

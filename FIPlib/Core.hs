@@ -2,15 +2,15 @@
 {-- LANGUAGE NoMonomorphismRestriction --}
 
 -- | This is the primary Module for Functional Image Processing Course
--- | Developed by Andrew Kordik for
--- | the University of Dayton
--- | All Rights Reserved
--- | This library is still highly volitile.
--- | The goal is to provide an interface to 
--- | Discrete Signal Processing with a Functional Approach
--- | by leveraging Haskell and demonstraiting it through
--- | an image processing libarary, which means we are
--- | using two dimentional signal spaces
+-- Developed by Andrew Kordik for
+-- the University of Dayton
+-- All Rights Reserved
+-- This library is still highly volitile.
+-- The goal is to provide an interface to 
+-- Discrete Signal Processing with a Functional Approach
+-- by leveraging Haskell and demonstraiting it through
+-- an image processing libarary, which means we are
+-- using two dimentional signal spaces
 module FIPlib.Core
        (Image, 
         loadImage,
@@ -61,9 +61,13 @@ data Image i e = Image {
   alpha :: Array i e 
   } 
                  
+                 
+{-# RULES                 
+    "valueMapWindowReduction" forall win1 win2 image. valueMap (applyWindow win1)  (valueMap (applyWindow win2) image) = valueMap (applyWindow (indexMult win1 win2)) image
+  #-}
 
 -- | The Type-Class ValueMappable manipulates Arrays without changing thier dimensions.
--- | There is no checking to ensure that this is maintained.  
+-- There is no checking to ensure that this is maintained.  
 class ValueMappable a where
   valueMap :: (Array (Int, Int) a -> Array (Int, Int) b) -- ^ A Function that can manipulate a 2-D Array
               -> Image (Int, Int) a -- ^ The input Image
@@ -72,7 +76,7 @@ class ValueMappable a where
 
 
 -- | The Type-Class IndexMappable maniplates Arrays and may-or-maynot change their dimenions.
--- | There is no checking to ensure that the dimension changes are the same as the changes to the array
+-- There is no checking to ensure that the dimension changes are the same as the changes to the array
 class IndexMappable a where
   indexMap :: (Int -> Int) -- ^ A Function that changes the width of the image
               -> (Int -> Int) -- ^ A Function that changes the height of the image
@@ -82,7 +86,7 @@ class IndexMappable a where
 
 
 -- | Changes the Values in the components of an Image without changing their dimensions.
--- | Each component is changed in the same way
+-- Each component is changed in the same way
 instance ValueMappable a where
   valueMap f myImage = 
     let mw = width myImage
@@ -102,7 +106,7 @@ instance ValueMappable a where
 
 
 -- | Changes the Values in the components of an Image and changes the dimensions of the image
--- | Each component is changed in the same way
+-- Each component is changed in the same way
 instance IndexMappable a where
   indexMap fw fh farr myImage = 
     let mw = width myImage
@@ -199,19 +203,25 @@ instance Functor (Image (Int, Int) ) where
   -- fromInteger
 
 --}
+  
+indexMult arr1 arr2 = let ((minx,miny),(maxx,maxy)) = bounds arr1
+                      in array ((minx,miny),(maxx,maxy)) 
+                           [((i,j),(arr1 ! (i,j)) * (arr2 ! (i,j))) | i<-[minx..maxx], j<-[miny..maxy]]
 
 
 -- | applyWindow takes a 2-D array that contains the filter values.  This
--- | is synonmous with a Window filter common in Image Processing Algorithms.
--- | The Window Filter is applied as a sum of products on an element my element 
--- | basis.  First some basic information about the Array being processed (imageArray)
--- | and the window being applied (window) are gathered (i.e. width and height).
--- | Next the imageArray is padded with zeros.  This is common but not required by
--- | Windowing techniques.  The padding is accomplished by extending the image Array
--- | in all directions, such that the values are at the same index as the original,
--- | In other words, that is the padding data actually exists at indicies below zero
-applyWindow
-  :: (RealFrac a, Integral a1, Integral e) =>
+--   is synonmous with a Window filter common in Image Processing Algorithms.
+--   The Window Filter is applied as a sum of products on an element my element 
+--   basis.  First some basic information about the Array being processed (imageArray)
+--   and the window being applied (window) are gathered (i.e. width and height).
+--   Next the imageArray is padded with zeros.  This is common but not required by
+--   Windowing techniques.  The padding is accomplished by extending the image Array
+--   in all directions, such that the values are at the same index as the original,
+--   In other words, that is the padding data actually exists at indicies below zero
+{-# RULES
+    "applyWindow/applyWindow" forall win1 win2 image. applyWindow win1 (applyWindow win2 image) = applyWindow (indexMult win1 win2) image
+  #-}
+applyWindow :: (RealFrac a, Integral a1, Integral e) =>
      Array (Int, Int) a -- ^ 
      -> Array (Int, Int) a1 -- ^
      -> Array (Int, Int) e -- ^
@@ -269,7 +279,7 @@ loadImage filename =
        Just bmp -> return $ Just (bmpToImage bmp)
        
 -- | writeImage takes a file name and an image to be written as a 32-bit
--- | Bitmap Image
+-- Bitmap Image
 writeImage :: String -- ^ The Desired output filename
               -> Image (Int, Int) Word8 -- ^ The Image data to be written as a Bitmap
               -> IO () -- ^ Empty IO Monad
@@ -374,7 +384,7 @@ getOnlyRed [] = []
 -- | Puts only the Green components into a standalone array
 getOnlyGreen :: [a] -- ^ A List containing RGBA data
                 -> [a] -- ^ A List containing only Green data
-getOnlyGreen (_:g:_:_:xs) = [g] ++ ( getOnlyGreen xs )
+ge1tOnlyGreen (_:g:_:_:xs) = [g] ++ ( getOnlyGreen xs )
 getOnlyGreen [] = []
 
 -- | Puts only the Blue components into a standalone array

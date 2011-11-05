@@ -60,6 +60,7 @@ benchMarkFilter =
                        in defaultMain
                             [bench "warmup(whnf)" $ whnf putStrLn "HelloWorld",
                              bench "Gauss nfIO lena" $ nfIO (writeImage "GuassnfIOlena.bmp" (benchFilter lena gausWindow)), 
+                             
                              bench "Avg nfIO lena" $ nfIO   (writeImage "AvgnfIOlena.bmp"  (benchFilter lena avgWindow)),
                              bench "Avg -> Gauss nfIO lena" $ nfIO  (writeImage "AvgGaussnfIOlena.bmp" (benchTwoFilters lena gausWindow avgWindow)),
                              bench "Gauss nfIO thumb" $ nfIO (writeImage "GuassnfIOthumb.bmp" (benchFilter thumb gausWindow)), 
