@@ -2,6 +2,8 @@
 
 all: 
 	make clean
+	make doc
+	make hlint
 	ghc -O2 --make TestDemos.hs 
 	make hlint
 	@echo "Use \"make doc\" to make the FIPlib Documentation"
