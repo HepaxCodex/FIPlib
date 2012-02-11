@@ -35,5 +35,8 @@ clean:
 	rm -f FIPlib/*.hi
 	rm -f report.html
 	rm -f dump.txt
-
+	rm -f *.hp
+	rm -f *.ps
+	rm -f *.prof
+	rm -f *.aux
 
