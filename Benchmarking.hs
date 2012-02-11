@@ -20,8 +20,6 @@
 
 import FIPlib.Core
 import FIPlib.Filters
-import Data.Array
-import Data.Word
 import Criterion.Main
 
 
@@ -42,15 +40,16 @@ benchMarkFilterNoIO =
 --                         bench "GaussWindow (whnf)"     $ nfIO $ doGauss thumb,
 --                         bench "Avg Window (whnf)"      $ nfIO $ doAvg thumb,
 --                         bench "AvgGauss Window (whnf)" $ nfIO $ doAvgGauss thumb,
-                         bench "10 windows (whnf)"      $ nfIO $ doGauss thumb]
+                         bench "10 windows (whnf)"      $ nfIO $ do5 thumb]
 
-doGauss image    = writeImage "doGauss"        $ valueMap ( applyWindow (gaussian 3 3 1)) image
+
+--doGauss image    = writeImage "doGauss"        $ valueMap ( applyWindow (gaussian 3 3 1)) image
 doAvg image      = writeImage "doAvg.bmp"      $ valueMap ( applyWindow (arithmeticMean 3 3 )) image
-doAvgGauss image = writeImage "doAvgGauss.bmp" $ valueMap ( applyWindow (gaussian 3 3 1 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
+--doAvgGauss image = writeImage "doAvgGauss.bmp" $ valueMap ( applyWindow (gaussian 3 3 1 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
 
-avgGauss image = valueMap ( applyWindow (gaussian 3 3 1 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
+avgGauss image = valueMap ( applyWindow (arithmeticMean 3 3 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
 do5 image = writeImage "do10.bmp" $  avgGauss $ avgGauss $ avgGauss $ avgGauss $ avgGauss image
 
---foo image = valueMap( applyWindow (gaussian 3 3 1)) ( valueMap ( applyWindow ( arightmeticMean 3 3)) image)
+-- foo image = valueMap( applyWindow (gaussian 3 3 1)) ( valueMap ( applyWindow ( arithmeticMean 3 3)) image)
 
---do10 image = writeImage "do10.bmp" $ foo . foo . foo . foo . foo image
+-- do10 image = writeImage "do10.bmp" $ foo . foo . foo . foo . foo image

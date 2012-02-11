@@ -1,3 +1,4 @@
+{-- LANGUAGE NoMonomorphismRestriction --}
 -- | Developed by Andrew Kordik for
 -- | the University of Dayton
 -- | All Rights Reserved
@@ -12,9 +13,11 @@
 --where
 
 
+
 import FIPlib.Core
 import FIPlib.Filters
-import Data.Array
+--import Data.Array.IArray
+import Data.Array.Unboxed
 import Data.Word
 import Criterion.Main
 
@@ -30,8 +33,10 @@ profileFunc =
        Nothing -> putStrLn "Failed to Load ThumbnailDemo Image"
        Just thumb -> doAvg thumb
 
+
+
 --doGauss image    = writeImage "doGauss"        $ valueMap ( applyWindow (gaussian 3 3 1)) image
-doAvg image      = writeImage "doAvg.bmp"      $ valueMap ( applyWindow (arithmeticMean 3 3 )) image
+doAvg image  = writeImage "doAvg.bmp" $ valueMap ( applyWindow (arithmeticMean 3 3 )) image
 --doAvgGauss image = writeImage "doAvgGauss.bmp" $ valueMap ( applyWindow (gaussian 3 3 1 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
 
 --avgGauss image = valueMap ( applyWindow (gaussian 3 3 1 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )

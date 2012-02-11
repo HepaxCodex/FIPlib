@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
-{-- LANGUAGE NoMonomorphismRestriction --}
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | This is the primary Module for Functional Image Processing Course
 -- Developed by Andrew Kordik for
@@ -28,6 +29,8 @@ module FIPlib.Core
         )where
 
 import Codec.BMP
+--import Data.Array.IArray
+--import Data.Array.Unboxed
 import Data.Array
 import qualified Data.ByteString
 import Data.Maybe
@@ -63,9 +66,14 @@ data Image i e = Image {
 
 
 {-# RULES
-    "valueMapWindowReduction" forall win1 win2 image. valueMap (applyWindow win1)  (valueMap (applyWindow win2) image) = valueMap (applyWindow (indexMult win1 win2)) image
-  #-}
-
+    "valueMap/valueMap" forall  win1 win2 image. valueMap (applyWindow win1)
+                                                               (valueMap (applyWindow win2 )
+                                                                         image) =
+                                                      valueMap (applyWindow
+                                                                   (indexMult win1
+                                                                              win2 ))
+                                                                   image
+ #-}
 -- | The Type-Class ValueMappable manipulates Arrays without changing thier dimensions.
 -- There is no checking to ensure that this is maintained.
 class ValueMappable a where
@@ -123,7 +131,7 @@ instance IndexMappable a where
              ,alpha  = farr ma
              }
 
-
+{--
 -- | This is never used however it should have been
 instance Functor (Image (Int, Int) ) where
   fmap f myImage =
@@ -140,6 +148,7 @@ instance Functor (Image (Int, Int) ) where
              ,blue   = fmap f mb
              ,alpha  = fmap f ma
              }
+--}
 
 
 
@@ -219,10 +228,13 @@ indexMult arr1 arr2 = let ((minx,miny),(maxx,maxy)) = bounds arr1
 {-# RULES
     "applyWindow/applyWindow" forall win1 win2 image. applyWindow win1 (applyWindow win2 image) = applyWindow (indexMult win1 win2) image
   #-}
+{--
 applyWindow :: (RealFrac a, Integral a1, Integral e) =>
      Array (Int, Int) a -- ^
      -> Array (Int, Int) a1 -- ^
      -> Array (Int, Int) e -- ^
+--}
+
 applyWindow  window imageArray =
   let ((windowWidthMin, windowHeightMin), (windowWidthMax, windowHeightMax)) = bounds window -- keep
       windowWidth = windowWidthMax - windowWidthMin  -- Keep Calculated
@@ -249,7 +261,7 @@ applyWindow  window imageArray =
                     j >= imageHeightMin &&
                     i <= imageWidthMax &&
                     j <= imageHeightMax
-                 then {-# SCC "sum" #-} sum  [{-# SCC "list" #-}floor ({-# SCC "fromIntegral" #-}fromIntegral({-# SCC "paddedImage" #-}paddedImage!(i+m,j+n)) * window!(m,n)) |
+                 then {-# SCC "sum" #-} sum  [{-# SCC "list" #-} ((paddedImage!(i+m,j+n)) * window!(m,n)) |
                                              m <- {-# SCC "m" #-} [windowWidthMin..windowWidthMax],
                                              n <- {-# SCC "n" #-} [windowHeightMin..windowHeightMax]]
                  else 0
@@ -270,8 +282,10 @@ applyWindow  window imageArray =
 --   Bitmap image and returns an Image wrapped in a Maybe and IO monad
 --   If the load fails, An Error is Printed and the function returns IO (Nothing)
 --   Otherwise it returns IO( Just Image (Int,Int) Word8))
+{--
 loadImage :: String -- ^ Input filename of a Bitmap Image with extension
              -> IO ( Maybe (Image (Int, Int) Word8)) -- ^ Loaded Image
+--}
 loadImage filename =
   do inputBMP <- loadBitmap filename
      case inputBMP of
@@ -280,9 +294,11 @@ loadImage filename =
 
 -- | writeImage takes a file name and an image to be written as a 32-bit
 -- Bitmap Image
+{--
 writeImage :: String -- ^ The Desired output filename
               -> Image (Int, Int) Word8 -- ^ The Image data to be written as a Bitmap
               -> IO () -- ^ Empty IO Monad
+--}
 writeImage filename image =
   writeBMP filename (imageToBmp image)
 
@@ -292,7 +308,9 @@ writeImage filename image =
 -- |loadBitmap : Loads a 24 or 32 bit BMP.
 --  This obviously requires that the image
 --  is stored in a Color Bitmap file.
+{--
 loadBitmap :: String -> IO (Maybe BMP)
+--}
 loadBitmap fileName  =
   do handle <- openFile fileName ReadMode
      mBMP <- hGetBMP handle
@@ -306,7 +324,9 @@ loadBitmap fileName  =
 
 -- | This takes an a BMP type and coverts it to an Image type
 -- so that it can be worked with
+{--
 bmpToImage :: BMP -> Image (Int, Int) GHC.Word.Word8
+--}
 bmpToImage colorBMP =
   let colorRGBA = unpackBMPToRGBA32 colorBMP
       (bmpWidth, bmpHeight) = bmpDimensions colorBMP
@@ -325,7 +345,9 @@ bmpToImage colorBMP =
 
 -- | imageToBmp takes the custom image type and puts it into a
 --   32bit RGBA Bitmap
+{--
 imageToBmp :: Image (Int, Int) GHC.Word.Word8 -> BMP
+--}
 imageToBmp image =
   let redList = arrayToByteString (red image) (width image) (height image)
       blueList = arrayToByteString (blue image) (width image) (height image)
@@ -338,11 +360,13 @@ imageToBmp image =
 
 -- | arrayToByteString takes a 2-D array and moves it to a 1-D list
 --   so that it can be packed into a bytestring
+{--
 arrayToByteString :: (Ix t2, Ix t1, Num t1, Num t2 , Enum t1, Enum t2)
                      => Array (t1, t2) t -- ^ a 2-D Array indexed from 0
                      -> t1 -- ^ the width in pixels / array elements
                      -> t2 -- ^ the height in pixels / array elements
                      -> [t] -- ^ a 1 dimentional list in raster order of all pixels/elements
+--}
 arrayToByteString array width height =
   [array ! (i,j) |
    i <- [0..width-1],
@@ -351,11 +375,13 @@ arrayToByteString array width height =
 
 -- | combineComponents takes arrays containing a single component
 --   and aggregates them into a single multiple component array in Raster order (RGBA)
+{--
 combineComponents :: [a] -- ^ An array of Red components only
                      -> [a] -- ^ An array of Green components only
                      -> [a] -- ^ An array of Blue components only
                      -> [a] -- ^ An array of Alpha components only
                      -> [a] -- ^ An array of All components in raster order RGBA
+--}
 combineComponents (r:rxs) (g:gxs) (b:bxs) (a:axs) =
   [r,g,b,a] ++ ( combineComponents rxs gxs bxs axs )
 combineComponents [] [] [] [] = []
@@ -364,10 +390,12 @@ combineComponents [] [] [] [] = []
 -- |byteStringToArray is takes a ByteString
 --  and converts it to a 2-d array of the appropriate width and height.
 --  Arrays are indexed from 0,0 to width-1, height-1
+{--
 byteStringToArray :: Data.ByteString.ByteString -- ^ A Single compnent bytestring
                      -> Int -- ^ Width in Pixels
                      -> Int -- ^ Height in Pixels
                      -> Array (Int, Int) Word8 -- ^ 2-d Array containing a single component
+--}
 byteStringToArray byteString width height =
   array ((0,0),(width-1,height-1))
   [((i,j), Data.ByteString.index byteString ( i * width + j )) |
