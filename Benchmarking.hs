@@ -1,3 +1,7 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE NoMonomorphismRestriction#-}
+{-# LANGUAGE RankNTypes #-}
 
 -- | This is the primary Module for Functional Image Processing Course
 -- | Developed by Andrew Kordik for
@@ -21,6 +25,7 @@
 import FIPlib.Core
 import FIPlib.Filters
 import Criterion.Main
+import Data.Array.Unboxed
 
 
 main = benchMarkFilterNoIO
@@ -32,23 +37,23 @@ benchMarkFilterNoIO =
   do thumbImage <- loadImage "ThumbnailDemo.bmp"
      case thumbImage of
        Nothing -> putStrLn "Failed to Load ThumbnailDemo Image"
-       Just thumb -> let gaussWindow = gaussian 3 3 1
-                         avgWindow  = arithmeticMean 3 3
+       Just thumb -> let --gaussWindow = gaussian 3 3 1
+                         --(avgWindow)= (arithmeticMean 3 3)
                      in defaultMain
                         [bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
 --                         bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
 --                         bench "GaussWindow (whnf)"     $ nfIO $ doGauss thumb,
 --                         bench "Avg Window (whnf)"      $ nfIO $ doAvg thumb,
 --                         bench "AvgGauss Window (whnf)" $ nfIO $ doAvgGauss thumb,
-                         bench "10 windows (whnf)"      $ nfIO $ do5 thumb]
+                         bench "10 windows (whnf)"      $ nfIO $ doAvg thumb]
 
 
 --doGauss image    = writeImage "doGauss"        $ valueMap ( applyWindow (gaussian 3 3 1)) image
 doAvg image      = writeImage "doAvg.bmp"      $ valueMap ( applyWindow (arithmeticMean 3 3 )) image
 --doAvgGauss image = writeImage "doAvgGauss.bmp" $ valueMap ( applyWindow (gaussian 3 3 1 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
 
-avgGauss image = valueMap ( applyWindow (arithmeticMean 3 3 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
-do5 image = writeImage "do10.bmp" $  avgGauss $ avgGauss $ avgGauss $ avgGauss $ avgGauss image
+-- avgGauss image = valueMap ( applyWindow (arithmeticMean 3 3 )) ( valueMap (applyWindow (arithmeticMean 3 3)) image )
+--do5 image = writeImage "do10.bmp" $  avgGauss $ avgGauss $ avgGauss $ avgGauss $ avgGauss image
 
 -- foo image = valueMap( applyWindow (gaussian 3 3 1)) ( valueMap ( applyWindow ( arithmeticMean 3 3)) image)
 

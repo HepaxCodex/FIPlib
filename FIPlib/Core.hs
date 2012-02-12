@@ -1,6 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | This is the primary Module for Functional Image Processing Course
 -- Developed by Andrew Kordik for
@@ -55,13 +56,13 @@ data Image i e = Image {
   -- |Height in pixels of the image
   height :: Int,
   -- |The Red pixel Values of the image
-  red :: Array i e,
+  red :: UArray i e,
   -- |The Green pixel values of the image
-  green :: Array i e,
+  green :: UArray i e,
   -- |The Blue pixel values of the image
-  blue :: Array i e,
+  blue :: UArray i e,
   -- |The Alpha pixel values of the image
-  alpha :: Array i e
+  alpha :: UArray i e
   }
 
 
@@ -77,7 +78,7 @@ data Image i e = Image {
 -- | The Type-Class ValueMappable manipulates Arrays without changing thier dimensions.
 -- There is no checking to ensure that this is maintained.
 class ValueMappable a where
-  valueMap :: (Array (Int, Int) a -> Array (Int, Int) b) -- ^ A Function that can manipulate a 2-D Array
+  valueMap :: (UArray (Int, Int) a -> UArray (Int, Int) b) -- ^ A Function that can manipulate a 2-D Array
               -> Image (Int, Int) a -- ^ The input Image
               -> Image (Int, Int) b -- ^ The output Image
 
@@ -88,8 +89,8 @@ class ValueMappable a where
 class IndexMappable a where
   indexMap :: (Int -> Int) -- ^ A Function that changes the width of the image
               -> (Int -> Int) -- ^ A Function that changes the height of the image
-              -> (Array (Int, Int) a ->
-                  Array (Int, Int) b) -- ^ A Function that manipulates a 2-D Array
+              -> (UArray (Int, Int) a ->
+                  UArray (Int, Int) b) -- ^ A Function that manipulates a 2-D Array
               -> Image (Int, Int) a -- ^ The input Image
               -> Image (Int, Int) b -- ^ The output Image
 
@@ -209,10 +210,10 @@ instance Functor (Image (Int, Int) ) where
   -- fromInteger
 
 --}
-
 indexMult arr1 arr2 = let ((minx,miny),(maxx,maxy)) = bounds arr1
                       in array ((minx,miny),(maxx,maxy))
                            [((i,j),(arr1 ! (i,j)) * (arr2 ! (i,j))) | i<-[minx..maxx], j<-[miny..maxy]]
+
 
 
 -- | applyWindow takes a 2-D array that contains the filter values.  This
@@ -224,57 +225,60 @@ indexMult arr1 arr2 = let ((minx,miny),(maxx,maxy)) = bounds arr1
 --   Windowing techniques.  The padding is accomplished by extending the image Array
 --   in all directions, such that the values are at the same index as the original,
 --   In other words, that is the padding data actually exists at indicies below zero
-{- RULES
+{-# RULES
     "applyWindow/applyWindow" forall win1 win2 image. applyWindow win1
                                                                   (applyWindow win2 image) =
                                                                   applyWindow (indexMult win1 win2) image
-  -}
+  #-}
 {--
 applyWindow :: (RealFrac a, Integral a1, Integral e) =>
      Array (Int, Int) a -- ^
      -> Array (Int, Int) a1 -- ^
      -> Array (Int, Int) e -- ^
 --}
-
---applyWindow :: (Num e ) =>  UArray (Int,Int) e ->  UArray (Int,Int) e ->  UArray (Int, Int) e
+--applyWindow :: (Num e) => UArray (Int,Int) e -> UArray (Int, Int) e -> UArray (Int, Int) e
+applyWindow :: forall e. (Num e, IArray UArray e)
+            => UArray (Int,Int) e -> UArray (Int,Int) e -> UArray (Int,Int) e
 applyWindow  window imageArray =
-  let ((windowWidthMin, windowHeightMin), (windowWidthMax, windowHeightMax)) = bounds window -- keep
+  let ((windowWidthMin, windowHeightMin), (windowWidthMax, windowHeightMax)) = Data.Array.Unboxed.bounds (window) -- keep
       windowWidth = windowWidthMax - windowWidthMin  -- Keep Calculated
       windowHeight = windowHeightMax - windowHeightMin -- Keep Cakculated
       w = (floor (fromIntegral(windowWidth) / 2)) :: Int -- Keep
       h = (floor (fromIntegral(windowHeight) / 2)) :: Int -- Keep
-      ((imageWidthMin, imageHeightMin), (imageWidthMax, imageHeightMax)) = bounds imageArray -- Keep
-      paddedImage =
-        array
+      ((imageWidthMin, imageHeightMin), (imageWidthMax, imageHeightMax)) = Data.Array.Unboxed.bounds imageArray -- Keep
+      paddedImage :: UArray (Int, Int) e =
+        Data.Array.Unboxed.array
         ((imageWidthMin-w,imageHeightMin-h),(imageWidthMax+w,imageHeightMax+h))
         [ ((i,j), if i >= imageWidthMin &&
                      j >= imageHeightMin &&
                      i <= imageWidthMax &&
                      j <= imageHeightMax
-                  then imageArray ! (i,j)
+                  then (imageArray) Data.Array.Unboxed.! (i,j)
                   else 0
           ) |
           i <- [imageWidthMin-w..imageWidthMax+w],
           j <- [imageHeightMin-h..imageHeightMax+h]]
       filteredPaddedImage  = {-# SCC "filter" #-}
-        array
+        (Data.Array.Unboxed.array
         ((imageWidthMin-w,imageHeightMin-h),(imageWidthMax+w,imageHeightMax+h))
         [((i,j), if i >= imageWidthMin &&
                     j >= imageHeightMin &&
                     i <= imageWidthMax &&
                     j <= imageHeightMax
-                 then {-# SCC "sum" #-} sum  [{-# SCC "list" #-} ((paddedImage!(i+m,j+n)) * window!(m,n)) |
+                 then {-# SCC "sum" #-} sum  [{-# SCC "list" #-} ((paddedImage Data.Array.Unboxed.!(i+m,j+n)) * window Data.Array.Unboxed.!(m,n)) |
                                              m <- {-# SCC "m" #-} [windowWidthMin..windowWidthMax],
                                              n <- {-# SCC "n" #-} [windowHeightMin..windowHeightMax]]
                  else 0
          ) |
          i <- [imageWidthMin-w..imageWidthMax+w],
-         j <- [imageHeightMin-h..imageHeightMax+h]]
-  in array -- Is this necessary?  or can we just return filteredPaddedImage
+         j <- [imageHeightMin-h..imageHeightMax+h]])
+{--  in array -- Is this necessary?  or can we just return filteredPaddedImage
      ((imageWidthMin, imageHeightMin), (imageWidthMax, imageHeightMax))
      [((i,j), (filteredPaddedImage!(i,j)) ) |
       i <- [imageWidthMin .. imageWidthMax],
       j <- [imageHeightMin .. imageHeightMax]]
+--}
+     in (filteredPaddedImage)
 
 
 -- sumOverFiler paddedImage hMax hMin w h  =
@@ -350,6 +354,7 @@ bmpToImage colorBMP =
 {--
 imageToBmp :: Image (Int, Int) GHC.Word.Word8 -> BMP
 --}
+
 imageToBmp image =
   let redList = arrayToByteString (red image) (width image) (height image)
       blueList = arrayToByteString (blue image) (width image) (height image)
@@ -357,7 +362,6 @@ imageToBmp image =
       alphaList = arrayToByteString (alpha image) (width image) (height image)
   in
    packRGBA32ToBMP (width image) ( height image ) (Data.ByteString.pack (combineComponents redList greenList blueList alphaList))
-
 
 
 -- | arrayToByteString takes a 2-D array and moves it to a 1-D list
@@ -369,8 +373,9 @@ arrayToByteString :: (Ix t2, Ix t1, Num t1, Num t2 , Enum t1, Enum t2)
                      -> t2 -- ^ the height in pixels / array elements
                      -> [t] -- ^ a 1 dimentional list in raster order of all pixels/elements
 --}
-arrayToByteString array width height =
-  [array ! (i,j) |
+arrayToByteString ::  forall e. (Num e, IArray UArray e) =>  UArray (Int,Int) e -> Int -> Int -> [e]
+arrayToByteString image width height =
+  [image ! (i,j) |
    i <- [0..width-1],
    j <- [0..height-1]]
 

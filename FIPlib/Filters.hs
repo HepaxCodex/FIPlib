@@ -21,7 +21,7 @@ module FIPlib.Filters
 
 --import Data.Array.IArray
 --import Data.Array.Unboxed
-import Data.Array
+import Data.Array.Unboxed
 import FIPlib.Core
 
 
@@ -51,8 +51,8 @@ genFilter :: (Num e)
              => a -- ^ Width of the filter (MUST BE ODD!)
              -> a -- ^ Height of the filter (MUST BE ODD!)
              -> (a -> a -> e) -- ^ Function which takes a width and height position and returns a value
-             -> UArray (a,a) e -- ^ Array containing the filter --}
-
+             -> UArray (Int,Int) e -- ^ Array containing the filter
+             --}
 genFilter width height fcn =
   let (endWidth, endHeight) = dimToIndex width height
   in (array
