@@ -30,8 +30,8 @@ module FIPlib.Core
 
 import Codec.BMP
 --import Data.Array.IArray
---import Data.Array.Unboxed
-import Data.Array
+import Data.Array.Unboxed
+--import Data.Array
 import qualified Data.ByteString
 import Data.Maybe
 import System.IO
@@ -65,7 +65,7 @@ data Image i e = Image {
   }
 
 
-{-# RULES
+{- RULES
     "valueMap/valueMap" forall  win1 win2 image. valueMap (applyWindow win1)
                                                                (valueMap (applyWindow win2 )
                                                                          image) =
@@ -73,7 +73,7 @@ data Image i e = Image {
                                                                    (indexMult win1
                                                                               win2 ))
                                                                    image
- #-}
+ -}
 -- | The Type-Class ValueMappable manipulates Arrays without changing thier dimensions.
 -- There is no checking to ensure that this is maintained.
 class ValueMappable a where
@@ -92,7 +92,6 @@ class IndexMappable a where
                   Array (Int, Int) b) -- ^ A Function that manipulates a 2-D Array
               -> Image (Int, Int) a -- ^ The input Image
               -> Image (Int, Int) b -- ^ The output Image
-
 
 -- | Changes the Values in the components of an Image without changing their dimensions.
 -- Each component is changed in the same way
@@ -225,9 +224,11 @@ indexMult arr1 arr2 = let ((minx,miny),(maxx,maxy)) = bounds arr1
 --   Windowing techniques.  The padding is accomplished by extending the image Array
 --   in all directions, such that the values are at the same index as the original,
 --   In other words, that is the padding data actually exists at indicies below zero
-{-# RULES
-    "applyWindow/applyWindow" forall win1 win2 image. applyWindow win1 (applyWindow win2 image) = applyWindow (indexMult win1 win2) image
-  #-}
+{- RULES
+    "applyWindow/applyWindow" forall win1 win2 image. applyWindow win1
+                                                                  (applyWindow win2 image) =
+                                                                  applyWindow (indexMult win1 win2) image
+  -}
 {--
 applyWindow :: (RealFrac a, Integral a1, Integral e) =>
      Array (Int, Int) a -- ^
@@ -235,6 +236,7 @@ applyWindow :: (RealFrac a, Integral a1, Integral e) =>
      -> Array (Int, Int) e -- ^
 --}
 
+--applyWindow :: (Num e ) =>  UArray (Int,Int) e ->  UArray (Int,Int) e ->  UArray (Int, Int) e
 applyWindow  window imageArray =
   let ((windowWidthMin, windowHeightMin), (windowWidthMax, windowHeightMax)) = bounds window -- keep
       windowWidth = windowWidthMax - windowWidthMin  -- Keep Calculated
