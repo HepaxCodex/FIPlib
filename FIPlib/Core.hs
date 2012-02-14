@@ -66,15 +66,11 @@ data Image i e = Image {
   }
 
 
-{- RULES
-    "valueMap/valueMap" forall  win1 win2 image. valueMap (applyWindow win1)
-                                                               (valueMap (applyWindow win2 )
-                                                                         image) =
-                                                      valueMap (applyWindow
-                                                                   (indexMult win1
-                                                                              win2 ))
-                                                                   image
- -}
+{-# RULES
+"valueMap/valueMap" forall win1 win2 image. valueMap (applyWindow win1) (valueMap (applyWindow win2 ) image) = valueMap (applyWindow (indexMult win1 win2 )) image
+"valueMap/valueMap2" forall w1 w2 image. valueMap (applyWindow w1) $ valueMap (applyWindow w2) $ image = valueMap (applyWindow (indexMult w1 w2 )) image
+"valueMap/valueMap3" forall w1 w2 image. valueMap (applyWindow w1) . valueMap (applyWindow w2) $ image = valueMap (applyWindow (indexMult w1 w2 )) image
+  #-}
 -- | The Type-Class ValueMappable manipulates Arrays without changing thier dimensions.
 -- There is no checking to ensure that this is maintained.
 class ValueMappable a where
