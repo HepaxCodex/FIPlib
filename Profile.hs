@@ -31,8 +31,19 @@ profileFunc =
   do thumbImage <- loadImage "ThumbnailDemo.bmp"
      case thumbImage of
        Nothing -> putStrLn "Failed to Load ThumbnailDemo Image"
-       Just thumb -> doAvg thumb
+       Just thumb -> do5Avg thumb
 
+do5Avg image =
+         writeImage "do5Avg.bmp" $ valueMap
+           (applyWindow ( arithmeticMean 3 3 ))
+           (valueMap
+            (applyWindow ( arithmeticMean 3 3))
+            (valueMap
+             (applyWindow ( arithmeticMean 3 3))
+             (valueMap
+              (applyWindow ( arithmeticMean 3 3))
+              (valueMap
+               (applyWindow ( arithmeticMean 3 3)) image))))
 
 
 --doGauss image    = writeImage "doGauss"        $ valueMap ( applyWindow (gaussian 3 3 1)) image

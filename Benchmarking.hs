@@ -21,7 +21,7 @@
 --   )
 --where
 
-module Benchmarking where
+
 
 
 import FIPlib.Core
@@ -43,17 +43,37 @@ benchMarkFilterNoIO =
                          --1(avgWindow)= (arithmeticMean 3 3)
                      in defaultMain
                         [bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
+                         bench "do5Avg" $ nfIO $ do5Avg thumb]
 --                         bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
 --                         bench "GaussWindow (whnf)"     $ nfIO $ doGauss thumb,
 --                         bench "Avg Window (whnf)"      $ nfIO $ doAvg thumb,
 --                         bench "AvgGauss Window (whnf)" $ nfIO $ doAvgGauss thumb,
                          --bench "1 window (whnf)"        $ nfIO $ doRed thumb,
                          --bench "1 window (whnf)"        $ nfIO $ doRed2 thumb]
-                         bench "10 windows (whnf)"      $ nfIO $ do10 thumb]
+                         --bench "10 windows (whnf)"      $ nfIO $ do10 thumb]
 
 
---doGauss image    = writeImage "doGauss"        $ valueMap ( applyWindow (gaussian 3 3 1)) image
--- doAvg image      = writeImage "doAvg.bmp"      $ valueMap ( applyWindow (arithmeticMean 3 3 )) image
+-- doGauss image    = writeImage "doGauss"        $ valueMap ( applyWindow ( gaussian 3 3 1     ) ) image
+doAvg image      = writeImage "doAvg.bmp"      $ valueMap ( applyWindow ( arithmeticMean 3 3 ) ) image
+
+do5Avg image =
+         let filterSize = 5
+         in writeImage "do5Avg.bmp" $ valueMap
+            (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) image))))
+
+
+
+
+
+
 {--
 doAvg image = writeImage "doAvg" $ valueMap (applyWindow (arithmeticMean 3 3)) (valueMap (applyWindow (arithmeticMean 3 3)) image)
 doRed image =
@@ -66,6 +86,13 @@ doRed2 image =
   in writeImage "doRed.bmp" $ valueMap (applyWindow win1) (valueMap (applyWindow win2 ) (valueMap (applyWindow win1) (valueMap (applyWindow win2 ) image)))
 --}
 
+--do10 image = writeImage "do10.bmp" $ foo $ foo $ image
+
+--do10 image = writeImage "do10.bmp" $ valueMap (applyWindow (arithmeticMean 3 3)) ( valueMap (applyWindow (arithmeticMean 3 3)) image)
+
+--do10 image = writeImage "do10.bmp" $ valueMap (applyWindow (arithmeticMean 3 3)) . valueMap (applyWindow (arithmeticMean 3 3)) $ image
+
 do10 image = writeImage "do10.bmp" $ foo $ foo $ image
 
+{-# INLINE foo #-}
 foo  = valueMap (applyWindow (arithmeticMean 3 3))

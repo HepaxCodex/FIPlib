@@ -2,6 +2,7 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE BangPatterns #-}
 
 -- | This is the primary Module for Functional Image Processing Course
 -- Developed by Andrew Kordik for
@@ -38,6 +39,8 @@ import Data.Maybe
 import System.IO
 import GHC.Word
 
+import qualified Data.List as L
+
 -- haddock FIP.hs --ignore-all-exports -h -o do
 
 
@@ -66,6 +69,7 @@ data Image i e = Image {
   }
 
 
+{-# INLINE [1] valueMap #-}
 {-# RULES
 "valueMap/valueMap" forall win1 win2 image. valueMap (applyWindow win1) (valueMap (applyWindow win2 ) image) = valueMap (applyWindow (indexMult win1 win2 )) image
 "valueMap/valueMap2" forall w1 w2 image. valueMap (applyWindow w1) $ valueMap (applyWindow w2) $ image = valueMap (applyWindow (indexMult w1 w2 )) image
@@ -221,6 +225,7 @@ indexMult arr1 arr2 = let ((minx,miny),(maxx,maxy)) = bounds arr1
 --   Windowing techniques.  The padding is accomplished by extending the image Array
 --   in all directions, such that the values are at the same index as the original,
 --   In other words, that is the padding data actually exists at indicies below zero
+{-# INLINE [1] applyWindow #-}
 {-# RULES
     "applyWindow/applyWindow" forall win1 win2 image. applyWindow win1
                                                                   (applyWindow win2 image) =
@@ -233,6 +238,8 @@ applyWindow :: (RealFrac a, Integral a1, Integral e) =>
      -> Array (Int, Int) e -- ^
 --}
 --applyWindow :: (Num e) => UArray (Int,Int) e -> UArray (Int, Int) e -> UArray (Int, Int) e
+
+
 applyWindow :: forall e. (Num e, IArray UArray e)
             => UArray (Int,Int) e -> UArray (Int,Int) e -> UArray (Int,Int) e
 applyWindow  window imageArray =
@@ -261,9 +268,12 @@ applyWindow  window imageArray =
                     j >= imageHeightMin &&
                     i <= imageWidthMax &&
                     j <= imageHeightMax
-                 then {-# SCC "sum" #-} sum  [{-# SCC "list" #-} ((paddedImage Data.Array.Unboxed.!(i+m,j+n)) * window Data.Array.Unboxed.!(m,n)) |
+--                 then {-# SCC "sum" #-}  sum  [{-# SCC "list" #-} ((paddedImage Data.Array.Unboxed.!(i+m,j+n)) * window Data.Array.Unboxed.!(m,n)) |
+--                                             m <- {-# SCC "m" #-} [windowWidthMin..windowWidthMax],
+--                                             n <- {-# SCC "n" #-} [windowHeightMin..windowHeightMax]]
+                 then {-# SCC "sum" #-}  L.foldl' (+) 0 [{-# SCC "list" #-} (myMult (paddedImage Data.Array.Unboxed.!(i+m,j+n)) (window Data.Array.Unboxed.!(m,n)))|
                                              m <- {-# SCC "m" #-} [windowWidthMin..windowWidthMax],
-                                             n <- {-# SCC "n" #-} [windowHeightMin..windowHeightMax]]
+                                             n <- {-# SCC "n" #-} [windowHeightMin..windowHeightMax] ]
                  else 0
          ) |
          i <- [imageWidthMin-w..imageWidthMax+w],
@@ -276,9 +286,7 @@ applyWindow  window imageArray =
 --}
      in (filteredPaddedImage)
 
-
--- sumOverFiler paddedImage hMax hMin w h  =
-
+myMult !x !y = x `seq` y `seq` x * y
 
 -- | loadImage takes a filename including the extension of a 32bit
 --   Bitmap image and returns an Image wrapped in a Maybe and IO monad
