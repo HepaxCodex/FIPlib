@@ -98,8 +98,13 @@ gaussian :: (Floating e, Integral a, Ix a)
      -> e -- ^ standard deviation of gaussian function to be used
      -> Array (a, a) e -- ^ Resulting Gaussian Spatial Smoothing  Window Filter
 --}
+--gaussian width height sigma =
+--  let gaussFcn = (\sigma x y -> exp (-((fromIntegral x)^2 + (fromIntegral y)^2)/(2*sigma^2)))
+--   in genFilter width height (gaussFcn sigma)
+
+
 gaussian width height sigma =
-  let gaussFcn = (\sigma x y -> exp (-((fromIntegral x)^2 + (fromIntegral y)^2)/(2*sigma^2)))
+  let gaussFcn = (\sigma x y -> exp (-(( x)^2 + ( y)^2)/(2*sigma^2)))
    in genFilter width height (gaussFcn sigma)
 
 
