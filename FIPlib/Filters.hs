@@ -1,3 +1,19 @@
+-- *****************************************************************************
+--
+-- Filename    : FIPlib/Filters.hs
+--
+-- Description : Contains code for the generation and manipulation of common
+--               Image processing filter techniques.
+--
+-- Author      : Andrew Kordik
+--
+-- Copyright A.M. Kordik and S. Perugini
+--
+-- *****************************************************************************
+
+
+
+
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
 -- | This Module is used to generate different Window Filters
@@ -7,9 +23,6 @@
 -- time domain
 --
 --
--- Notes ::
--- 1) The Filters should actually be an equation when possible, passed to
---    a function which generates the array (Done)
 -- TODO ::
 -- 1) Filter should check to make sure width and height are odd
 
@@ -19,8 +32,7 @@ module FIPlib.Filters
        --)
        where
 
---import Data.Array.IArray
---import Data.Array.Unboxed
+
 import Data.Array.Unboxed
 import FIPlib.Core
 

@@ -1,7 +1,22 @@
+-- *****************************************************************************
+--
+-- Filename    : Benchmakring.hs
+--
+-- Description : Contains code used to benchmakr the FIPlib library
+--
+-- Author      : Andrew Kordik
+--
+-- Copyright A.M. Kordik and S. Perugini
+--
+-- *****************************************************************************
+
+
+
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE NoMonomorphismRestriction#-}
 {-# LANGUAGE RankNTypes #-}
+
 
 -- | This is the primary Module for Functional Image Processing Course
 -- | Developed by Andrew Kordik for

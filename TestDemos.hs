@@ -1,9 +1,16 @@
--- | TestDemos.hs
--- |
--- | This File contains some sample demos for FIPlib.
--- |
--- | Developed by Andrew Kordik
--- | All Rights Reserved
+-- *****************************************************************************
+--
+-- Filename    : TestDemos.hs
+--
+-- Description : Contains code to generate the demos in the FIPlib paper
+--
+-- Author      : Andrew Kordik
+--
+-- Copyright A.M. Kordik and S. Perugini
+--
+-- *****************************************************************************
+
+
 
 {- LANGUAGE FlexibleInstances -}
 {-# LANGUAGE NoMonomorphismRestriction #-}

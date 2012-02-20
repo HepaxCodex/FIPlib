@@ -1,19 +1,28 @@
+-- *****************************************************************************
+--
+-- Filename    : FIPlib/Core.hs
+--
+-- Description : This is the core code behind the FIPlib library
+--               The base Image type and primary operations on Images are
+--               defined here.
+--
+--               This library is still highly volitile.
+--
+-- Author      : Andrew Kordik
+--
+-- Copyright A.M. Kordik and S. Perugini
+--
+-- *****************************************************************************
+
+
+
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE BangPatterns #-}
 
--- | This is the primary Module for Functional Image Processing Course
--- Developed by Andrew Kordik for
--- the University of Dayton
--- All Rights Reserved
--- This library is still highly volitile.
--- The goal is to provide an interface to
--- Discrete Signal Processing with a Functional Approach
--- by leveraging Haskell and demonstraiting it through
--- an image processing libarary, which means we are
--- using two dimentional signal spaces
+-- | This is the primary Module for the Funtional Image Processing Libaray
 module FIPlib.Core
        (Image,
         loadImage,
@@ -31,9 +40,7 @@ module FIPlib.Core
         )where
 
 import Codec.BMP
---import Data.Array.IArray
 import Data.Array.Unboxed
---import Data.Array
 import qualified Data.ByteString
 import Data.Maybe
 import System.IO
