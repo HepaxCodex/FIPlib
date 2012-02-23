@@ -10,10 +10,10 @@ all:
 	@echo "Use \"make hlint\" to analyse the code for quality"
 
 benchmarking: Benchmarking.hs 
-	ghc -v --make -O2 -rtsopts Benchmarking.hs 
+	ghc --make -O2 -rtsopts Benchmarking.hs -funbox-strict-fields -optc-03 
 
 profile : Profile.hs FIPlib/Core.hs FIPlib/Filters.hs
-	ghc --make -O2 -rtsopts Profile.hs -prof -auto-all -caf-all -fforce-recomp
+	ghc --make -O2 -rtsopts Profile.hs -prof -auto-all -caf-all -fforce-recomp -funbox-strict-fields -fvia-C -optc-02 
 
 dump: 
 	make clean
