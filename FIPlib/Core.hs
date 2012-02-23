@@ -247,7 +247,7 @@ applyWindow :: (RealFrac a, Integral a1, Integral e) =>
 --applyWindow :: (Num e) => UArray (Int,Int) e -> UArray (Int, Int) e -> UArray (Int, Int) e
 
 
-applyWindow :: forall e. (Num e, IArray UArray e)
+applyWindow :: forall e. (Integral e, Num e, IArray UArray e)
             => UArray (Int,Int) e -> UArray (Int,Int) e -> UArray (Int,Int) e
 applyWindow  window imageArray =
   let ((windowWidthMin, windowHeightMin), (windowWidthMax, windowHeightMax)) = Data.Array.Unboxed.bounds (window) -- keep
@@ -257,17 +257,17 @@ applyWindow  window imageArray =
       h = (floor (fromIntegral(windowHeight) / 2)) :: Int -- Keep
       ((imageWidthMin, imageHeightMin), (imageWidthMax, imageHeightMax)) = Data.Array.Unboxed.bounds imageArray -- Keep
       paddedImage :: UArray (Int, Int) e =
-        Data.Array.Unboxed.array
-        ((imageWidthMin-w,imageHeightMin-h),(imageWidthMax+w,imageHeightMax+h))
-        [ ((i,j), if i >= imageWidthMin &&
-                     j >= imageHeightMin &&
-                     i <= imageWidthMax &&
-                     j <= imageHeightMax
-                  then (imageArray) Data.Array.Unboxed.! (i,j)
-                  else 0
-          ) |
-          i <- [imageWidthMin-w..imageWidthMax+w],
-          j <- [imageHeightMin-h..imageHeightMax+h]]
+                    Data.Array.Unboxed.array
+                        ((imageWidthMin-w,imageHeightMin-h),(imageWidthMax+w,imageHeightMax+h))
+                        [ ((i,j), if i >= imageWidthMin &&
+                                j >= imageHeightMin &&
+                                i <= imageWidthMax &&
+                                j <= imageHeightMax
+                                  then (imageArray) Data.Array.Unboxed.! (i,j)
+                                  else 0
+                          ) |
+                          i <- [imageWidthMin-w..imageWidthMax+w],
+                          j <- [imageHeightMin-h..imageHeightMax+h]]
       filteredPaddedImage  = {-# SCC "filter" #-}
         (Data.Array.Unboxed.array
         ((imageWidthMin-w,imageHeightMin-h),(imageWidthMax+w,imageHeightMax+h))
@@ -275,12 +275,9 @@ applyWindow  window imageArray =
                     j >= imageHeightMin &&
                     i <= imageWidthMax &&
                     j <= imageHeightMax
---                 then {-# SCC "sum" #-}  sum  [{-# SCC "list" #-} ((paddedImage Data.Array.Unboxed.!(i+m,j+n)) * window Data.Array.Unboxed.!(m,n)) |
---                                             m <- {-# SCC "m" #-} [windowWidthMin..windowWidthMax],
---                                             n <- {-# SCC "n" #-} [windowHeightMin..windowHeightMax]]
-                 then {-# SCC "sum" #-}  L.foldl' (+) 0 [{-# SCC "list" #-} (myMult (paddedImage Data.Array.Unboxed.!(i+m,j+n)) (window Data.Array.Unboxed.!(m,n)))|
-                                             m <- {-# SCC "m" #-} [windowWidthMin..windowWidthMax],
-                                             n <- {-# SCC "n" #-} [windowHeightMin..windowHeightMax] ]
+                 then (L.foldl' (+) 0 [(myMult (paddedImage Data.Array.Unboxed.!(i+m,j+n)) (window Data.Array.Unboxed.!(m,n)))|
+                                             m <- [windowWidthMin..windowWidthMax],
+                                             n <- [windowHeightMin..windowHeightMax] ])
                  else 0
          ) |
          i <- [imageWidthMin-w..imageWidthMax+w],
@@ -293,7 +290,8 @@ applyWindow  window imageArray =
 --}
      in (filteredPaddedImage)
 
-myMult !x !y = x `seq` y `seq` x * y
+
+myMult !x !y = x `seq` y `seq` floor(fromIntegral(x * y))
 
 -- | loadImage takes a filename including the extension of a 32bit
 --   Bitmap image and returns an Image wrapped in a Maybe and IO monad
@@ -384,9 +382,9 @@ arrayToByteString :: (Ix t2, Ix t1, Num t1, Num t2 , Enum t1, Enum t2)
                      -> t2 -- ^ the height in pixels / array elements
                      -> [t] -- ^ a 1 dimentional list in raster order of all pixels/elements
 --}
-arrayToByteString ::  forall e. (Num e, IArray UArray e) =>  UArray (Int,Int) e -> Int -> Int -> [e]
+arrayToByteString ::  forall e. (Integral e, Num e, IArray UArray e) =>  UArray (Int,Int) e -> Int -> Int -> [Word8]
 arrayToByteString image width height =
-  [image ! (i,j) |
+  [fromIntegral(image ! (i,j)) :: Word8 |
    i <- [0..width-1],
    j <- [0..height-1]]
 

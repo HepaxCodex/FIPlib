@@ -28,7 +28,7 @@ main = profileFunc
 --     bench "smoothingDemo" $ smoothingDemo]
 
 profileFunc =
-  do thumbImage <- loadImage "ThumbnailDemo.bmp"
+  do thumbImage <- loadImage "lena.bmp" --"ThumbnailDemo.bmp"
      case thumbImage of
        Nothing -> putStrLn "Failed to Load ThumbnailDemo Image"
        Just thumb -> do5Avg thumb
