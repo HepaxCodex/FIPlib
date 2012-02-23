@@ -59,7 +59,8 @@ benchMarkFilterNoIO =
                          --1(avgWindow)= (arithmeticMean 3 3)
                      in defaultMain
                         [bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
-                         bench "writeThumb (whnfIO)"    $ nfIO $ writeImage "test.bmp" thumb,
+                         --bench "writeThumb (whnfIO)"    $ nfIO $ writeImage "test.bmp" thumb,
+                         bench "do1Avg"                   $ nfIO $ doAvg thumb,
                          bench "do5aAvg -- No WriteImage" $ nfIO $ do5aAvg thumb,
                          bench "do5Avg  -- WriteImage   " $ nfIO $ do5Avg thumb]
 --                         bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",

@@ -86,8 +86,9 @@ arithmeticMean :: (Floating e, Integral a, Ix a)
                   -> Array (a, a) e -- ^ Resulting Arithmetic  Spatial Mean Window Filter
 --}
 {--arithmeticMean :: ( Num a) => t -> t -> UArray (t,t) a--}
+arithmeticMean :: Int -> Int -> UArray (Int, Int) Float
 arithmeticMean width height=
-  let fcn = (\ x y -> (1 `div` ( fromIntegral(width * height))))
+  let fcn = (\ x y -> (1.0 / ( fromIntegral(width * height))))
   in genFilter width height fcn
 
 

@@ -25,6 +25,7 @@
 -- | This is the primary Module for the Funtional Image Processing Libaray
 module FIPlib.Core
        (Image,
+        indexMult,
         loadImage,
         writeImage,
         valueMap,
@@ -217,6 +218,7 @@ instance Functor (Image (Int, Int) ) where
   -- fromInteger
 
 --}
+indexMult :: UArray (Int, Int) Float -> UArray (Int, Int) Float -> UArray (Int, Int) Float
 indexMult arr1 arr2 = let ((minx,miny),(maxx,maxy)) = bounds arr1
                       in array ((minx,miny),(maxx,maxy))
                            [((i,j),(arr1 ! (i,j)) * (arr2 ! (i,j))) | i<-[minx..maxx], j<-[miny..maxy]]
@@ -247,8 +249,9 @@ applyWindow :: (RealFrac a, Integral a1, Integral e) =>
 --applyWindow :: (Num e) => UArray (Int,Int) e -> UArray (Int, Int) e -> UArray (Int, Int) e
 
 
-applyWindow :: forall e. (Integral e, Num e, IArray UArray e)
-            => UArray (Int,Int) e -> UArray (Int,Int) e -> UArray (Int,Int) e
+--applyWindow :: forall e. (Integral e, Num e, IArray UArray e)
+--            => UArray (Int,Int) Float -> UArray (Int,Int) Word8 -> UArray (Int,Int) Word8
+applyWindow :: UArray (Int,Int) Float -> UArray (Int,Int) Word8 -> UArray (Int,Int) Word8
 applyWindow  window imageArray =
   let ((windowWidthMin, windowHeightMin), (windowWidthMax, windowHeightMax)) = Data.Array.Unboxed.bounds (window) -- keep
       windowWidth = windowWidthMax - windowWidthMin  -- Keep Calculated
@@ -256,7 +259,7 @@ applyWindow  window imageArray =
       w = (floor (fromIntegral(windowWidth) / 2)) :: Int -- Keep
       h = (floor (fromIntegral(windowHeight) / 2)) :: Int -- Keep
       ((imageWidthMin, imageHeightMin), (imageWidthMax, imageHeightMax)) = Data.Array.Unboxed.bounds imageArray -- Keep
-      paddedImage :: UArray (Int, Int) e =
+      paddedImage :: UArray (Int, Int) Word8 =
                     Data.Array.Unboxed.array
                         ((imageWidthMin-w,imageHeightMin-h),(imageWidthMax+w,imageHeightMax+h))
                         [ ((i,j), if i >= imageWidthMin &&
@@ -268,7 +271,7 @@ applyWindow  window imageArray =
                           ) |
                           i <- [imageWidthMin-w..imageWidthMax+w],
                           j <- [imageHeightMin-h..imageHeightMax+h]]
-      filteredPaddedImage  = {-# SCC "filter" #-}
+      filteredPaddedImage :: UArray (Int, Int) Word8 = {-# SCC "filter" #-}
         (Data.Array.Unboxed.array
         ((imageWidthMin-w,imageHeightMin-h),(imageWidthMax+w,imageHeightMax+h))
         [((i,j), if i >= imageWidthMin &&
@@ -282,16 +285,10 @@ applyWindow  window imageArray =
          ) |
          i <- [imageWidthMin-w..imageWidthMax+w],
          j <- [imageHeightMin-h..imageHeightMax+h]])
-{--  in array -- Is this necessary?  or can we just return filteredPaddedImage
-     ((imageWidthMin, imageHeightMin), (imageWidthMax, imageHeightMax))
-     [((i,j), (filteredPaddedImage!(i,j)) ) |
-      i <- [imageWidthMin .. imageWidthMax],
-      j <- [imageHeightMin .. imageHeightMax]]
---}
      in (filteredPaddedImage)
 
-
-myMult !x !y = x `seq` y `seq` floor(fromIntegral(x * y))
+myMult :: Word8 -> Float -> Word8
+myMult !x !y = x `seq` y `seq` floor(fromIntegral(x) * y)
 
 -- | loadImage takes a filename including the extension of a 32bit
 --   Bitmap image and returns an Image wrapped in a Maybe and IO monad
@@ -382,9 +379,9 @@ arrayToByteString :: (Ix t2, Ix t1, Num t1, Num t2 , Enum t1, Enum t2)
                      -> t2 -- ^ the height in pixels / array elements
                      -> [t] -- ^ a 1 dimentional list in raster order of all pixels/elements
 --}
-arrayToByteString ::  forall e. (Integral e, Num e, IArray UArray e) =>  UArray (Int,Int) e -> Int -> Int -> [Word8]
+--arrayToByteString :: UArray (Int,Int) Float -> Int -> Int -> [Word8]
 arrayToByteString image width height =
-  [fromIntegral(image ! (i,j)) :: Word8 |
+  [(image ! (i,j)) |
    i <- [0..width-1],
    j <- [0..height-1]]
 
