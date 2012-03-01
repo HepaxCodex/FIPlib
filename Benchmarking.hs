@@ -61,7 +61,17 @@ benchMarkFilterNoIO =
                         [bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
                          --bench "writeThumb (whnfIO)"    $ nfIO $ writeImage "test.bmp" thumb,
                          bench "do1Avg"                   $ nfIO $ doAvg thumb,
-                         bench "do5aAvg -- No WriteImage" $ nfIO $ do5aAvg thumb,
+                         bench "do5aAvg --  " $ nfIO $ do5aAvg thumb,
+                         bench "do10Avg --  " $ nfIO $ do10Avg thumb,
+                         bench "do20Avg --  " $ nfIO $ do20Avg thumb,
+                         bench "do30Avg --  " $ nfIO $ do30Avg thumb,
+                         bench "do40Avg --  " $ nfIO $ do40Avg thumb,
+                         bench "do50Avg --  " $ nfIO $ do50Avg thumb,
+                         bench "do60Avg --  " $ nfIO $ do60Avg thumb,
+                         bench "do70Avg --  " $ nfIO $ do70Avg thumb,
+                         bench "do80Avg --  " $ nfIO $ do80Avg thumb,
+                         bench "do90Avg --  " $ nfIO $ do90Avg thumb,
+                         bench "do100Avg --  " $ nfIO $ do100Avg thumb,
                          bench "do5Avg  -- WriteImage   " $ nfIO $ do5Avg thumb]
 --                         bench "warmup (whnf)"          $ whnf putStrLn "HelloWorld",
 --                         bench "GaussWindow (whnf)"     $ nfIO $ doGauss thumb,
@@ -104,9 +114,144 @@ do5Avg image =
                 (applyWindow ( arithmeticMean filterSize filterSize))
                 (valueMap
                  (applyWindow ( arithmeticMean filterSize filterSize)) image))))
-do35Avg image =
+
+
+
+do10Avg image =
           let filterSize = 3
-          in writeImage "do35Avg.bmp" $ valueMap
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) image -- 10
+                     )))))))))
+
+
+do20Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 10
+                     (valueMap
+                      (applyWindow ( arithmeticMean filterSize filterSize ))
+                      (valueMap
+                       (applyWindow ( arithmeticMean filterSize filterSize))
+                       (valueMap
+                        (applyWindow ( arithmeticMean filterSize filterSize))
+                        (valueMap
+                         (applyWindow ( arithmeticMean filterSize filterSize))
+                         (valueMap
+                          (applyWindow ( arithmeticMean filterSize filterSize)) -- 15
+                          (valueMap
+                           (applyWindow ( arithmeticMean filterSize filterSize ))
+                           (valueMap
+                            (applyWindow ( arithmeticMean filterSize filterSize))
+                            (valueMap
+                             (applyWindow ( arithmeticMean filterSize filterSize))
+                             (valueMap
+                              (applyWindow ( arithmeticMean filterSize filterSize))
+                              (valueMap
+                               (applyWindow ( arithmeticMean filterSize filterSize)) image -- 20
+                               )))))))))))))))))))
+
+do30Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 10
+                     (valueMap
+                      (applyWindow ( arithmeticMean filterSize filterSize ))
+                      (valueMap
+                       (applyWindow ( arithmeticMean filterSize filterSize))
+                       (valueMap
+                        (applyWindow ( arithmeticMean filterSize filterSize))
+                        (valueMap
+                         (applyWindow ( arithmeticMean filterSize filterSize))
+                         (valueMap
+                          (applyWindow ( arithmeticMean filterSize filterSize)) -- 15
+                          (valueMap
+                           (applyWindow ( arithmeticMean filterSize filterSize ))
+                           (valueMap
+                            (applyWindow ( arithmeticMean filterSize filterSize))
+                            (valueMap
+                             (applyWindow ( arithmeticMean filterSize filterSize))
+                             (valueMap
+                              (applyWindow ( arithmeticMean filterSize filterSize))
+                              (valueMap
+                               (applyWindow ( arithmeticMean filterSize filterSize)) -- 20
+                               (valueMap
+                                (applyWindow ( arithmeticMean filterSize filterSize ))
+                                (valueMap
+                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                 (valueMap
+                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                  (valueMap
+                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                   (valueMap
+                                    (applyWindow ( arithmeticMean filterSize filterSize)) -- 25
+                                    (valueMap
+                                     (applyWindow ( arithmeticMean filterSize filterSize ))
+                                     (valueMap
+                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                      (valueMap
+                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                       (valueMap
+                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                        (valueMap
+                                         (applyWindow ( arithmeticMean filterSize filterSize)) image -- 30
+                                         )))))))))))))))))))))))))))))
+
+
+do40Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
              (applyWindow ( arithmeticMean filterSize filterSize ))
              (valueMap
               (applyWindow ( arithmeticMean filterSize filterSize))
@@ -173,13 +318,244 @@ do35Avg image =
                                             (valueMap
                                              (applyWindow ( arithmeticMean filterSize filterSize))
                                              (valueMap
-                                              (applyWindow ( arithmeticMean filterSize filterSize)) image -- 35
-                                              )))))))))))))))))))))))))))))))))
+                                              (applyWindow ( arithmeticMean filterSize filterSize))  -- 35
+                                              (valueMap
+                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                               (valueMap
+                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                (valueMap
+                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                 (valueMap
+                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                  (valueMap
+                                                   (applyWindow ( arithmeticMean filterSize filterSize)) image -- 40
+                                                    ))))))))))))))))))))))))))))))))))))))))))))))))
 
 
+do50Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 10
+                     (valueMap
+                      (applyWindow ( arithmeticMean filterSize filterSize ))
+                      (valueMap
+                       (applyWindow ( arithmeticMean filterSize filterSize))
+                       (valueMap
+                        (applyWindow ( arithmeticMean filterSize filterSize))
+                        (valueMap
+                         (applyWindow ( arithmeticMean filterSize filterSize))
+                         (valueMap
+                          (applyWindow ( arithmeticMean filterSize filterSize)) -- 15
+                          (valueMap
+                           (applyWindow ( arithmeticMean filterSize filterSize ))
+                           (valueMap
+                            (applyWindow ( arithmeticMean filterSize filterSize))
+                            (valueMap
+                             (applyWindow ( arithmeticMean filterSize filterSize))
+                             (valueMap
+                              (applyWindow ( arithmeticMean filterSize filterSize))
+                              (valueMap
+                               (applyWindow ( arithmeticMean filterSize filterSize)) -- 20
+                               (valueMap
+                                (applyWindow ( arithmeticMean filterSize filterSize ))
+                                (valueMap
+                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                 (valueMap
+                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                  (valueMap
+                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                   (valueMap
+                                    (applyWindow ( arithmeticMean filterSize filterSize)) -- 25
+                                    (valueMap
+                                     (applyWindow ( arithmeticMean filterSize filterSize ))
+                                     (valueMap
+                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                      (valueMap
+                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                       (valueMap
+                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                        (valueMap
+                                         (applyWindow ( arithmeticMean filterSize filterSize)) -- 30
+                                         (valueMap
+                                          (applyWindow ( arithmeticMean filterSize filterSize ))
+                                          (valueMap
+                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                           (valueMap
+                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                            (valueMap
+                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                             (valueMap
+                                              (applyWindow ( arithmeticMean filterSize filterSize))  -- 35
+                                              (valueMap
+                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                               (valueMap
+                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                (valueMap
+                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                 (valueMap
+                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                  (valueMap
+                                                   (applyWindow ( arithmeticMean filterSize filterSize)) -- 40
+                                                   (valueMap
+                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                    (valueMap
+                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                     (valueMap
+                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                      (valueMap
+                                                       (applyWindow ( arithmeticMean filterSize filterSize)) -- 45
+                                                       (valueMap
+                                                        (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                        (valueMap
+                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                         (valueMap
+                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                          (valueMap
+                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                           (valueMap
+                                                            (applyWindow ( arithmeticMean filterSize filterSize)) image -- 50
+                                                            ))))))))))))))))))))))))))))))))))))))))))))))))
+
+do60Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 10
+                     (valueMap
+                      (applyWindow ( arithmeticMean filterSize filterSize ))
+                      (valueMap
+                       (applyWindow ( arithmeticMean filterSize filterSize))
+                       (valueMap
+                        (applyWindow ( arithmeticMean filterSize filterSize))
+                        (valueMap
+                         (applyWindow ( arithmeticMean filterSize filterSize))
+                         (valueMap
+                          (applyWindow ( arithmeticMean filterSize filterSize)) -- 15
+                          (valueMap
+                           (applyWindow ( arithmeticMean filterSize filterSize ))
+                           (valueMap
+                            (applyWindow ( arithmeticMean filterSize filterSize))
+                            (valueMap
+                             (applyWindow ( arithmeticMean filterSize filterSize))
+                             (valueMap
+                              (applyWindow ( arithmeticMean filterSize filterSize))
+                              (valueMap
+                               (applyWindow ( arithmeticMean filterSize filterSize)) -- 20
+                               (valueMap
+                                (applyWindow ( arithmeticMean filterSize filterSize ))
+                                (valueMap
+                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                 (valueMap
+                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                  (valueMap
+                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                   (valueMap
+                                    (applyWindow ( arithmeticMean filterSize filterSize)) -- 25
+                                    (valueMap
+                                     (applyWindow ( arithmeticMean filterSize filterSize ))
+                                     (valueMap
+                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                      (valueMap
+                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                       (valueMap
+                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                        (valueMap
+                                         (applyWindow ( arithmeticMean filterSize filterSize)) -- 30
+                                         (valueMap
+                                          (applyWindow ( arithmeticMean filterSize filterSize ))
+                                          (valueMap
+                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                           (valueMap
+                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                            (valueMap
+                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                             (valueMap
+                                              (applyWindow ( arithmeticMean filterSize filterSize))  -- 35
+                                              (valueMap
+                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                               (valueMap
+                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                (valueMap
+                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                 (valueMap
+                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                  (valueMap
+                                                   (applyWindow ( arithmeticMean filterSize filterSize)) -- 40
+                                                   (valueMap
+                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                    (valueMap
+                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                     (valueMap
+                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                      (valueMap
+                                                       (applyWindow ( arithmeticMean filterSize filterSize)) -- 45
+                                                       (valueMap
+                                                        (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                        (valueMap
+                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                         (valueMap
+                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                          (valueMap
+                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                           (valueMap
+                                                            (applyWindow ( arithmeticMean filterSize filterSize)) -- 50
+                                                            (valueMap
+                                                             (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                             (valueMap
+                                                              (applyWindow ( arithmeticMean filterSize filterSize))
+                                                              (valueMap
+                                                               (applyWindow ( arithmeticMean filterSize filterSize))
+                                                               (valueMap
+                                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                (valueMap
+                                                                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 55
+                                                                 (valueMap
+                                                                  (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                  (valueMap
+                                                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                   (valueMap
+                                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                    (valueMap
+                                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                     (valueMap
+                                                                      (applyWindow ( arithmeticMean filterSize filterSize)) image -- 60
+                                                                      ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 do70Avg image =
           let filterSize = 3
-          in writeImage "do70Avg.bmp" $
+          in writeImage "do125Avg.bmp" $
             (valueMap
              (applyWindow ( arithmeticMean filterSize filterSize ))
              (valueMap
@@ -315,8 +691,544 @@ do70Avg image =
                                                                               (valueMap
                                                                                (applyWindow ( arithmeticMean filterSize filterSize))
                                                                                (valueMap
-                                                                                (applyWindow ( arithmeticMean filterSize filterSize)) image  -- 70
-                                              ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+                                                                                (applyWindow ( arithmeticMean filterSize filterSize)) image -- 70
+                                                                                ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+do80Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 10
+                     (valueMap
+                      (applyWindow ( arithmeticMean filterSize filterSize ))
+                      (valueMap
+                       (applyWindow ( arithmeticMean filterSize filterSize))
+                       (valueMap
+                        (applyWindow ( arithmeticMean filterSize filterSize))
+                        (valueMap
+                         (applyWindow ( arithmeticMean filterSize filterSize))
+                         (valueMap
+                          (applyWindow ( arithmeticMean filterSize filterSize)) -- 15
+                          (valueMap
+                           (applyWindow ( arithmeticMean filterSize filterSize ))
+                           (valueMap
+                            (applyWindow ( arithmeticMean filterSize filterSize))
+                            (valueMap
+                             (applyWindow ( arithmeticMean filterSize filterSize))
+                             (valueMap
+                              (applyWindow ( arithmeticMean filterSize filterSize))
+                              (valueMap
+                               (applyWindow ( arithmeticMean filterSize filterSize)) -- 20
+                               (valueMap
+                                (applyWindow ( arithmeticMean filterSize filterSize ))
+                                (valueMap
+                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                 (valueMap
+                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                  (valueMap
+                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                   (valueMap
+                                    (applyWindow ( arithmeticMean filterSize filterSize)) -- 25
+                                    (valueMap
+                                     (applyWindow ( arithmeticMean filterSize filterSize ))
+                                     (valueMap
+                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                      (valueMap
+                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                       (valueMap
+                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                        (valueMap
+                                         (applyWindow ( arithmeticMean filterSize filterSize)) -- 30
+                                         (valueMap
+                                          (applyWindow ( arithmeticMean filterSize filterSize ))
+                                          (valueMap
+                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                           (valueMap
+                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                            (valueMap
+                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                             (valueMap
+                                              (applyWindow ( arithmeticMean filterSize filterSize))  -- 35
+                                              (valueMap
+                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                               (valueMap
+                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                (valueMap
+                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                 (valueMap
+                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                  (valueMap
+                                                   (applyWindow ( arithmeticMean filterSize filterSize)) -- 40
+                                                   (valueMap
+                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                    (valueMap
+                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                     (valueMap
+                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                      (valueMap
+                                                       (applyWindow ( arithmeticMean filterSize filterSize)) -- 45
+                                                       (valueMap
+                                                        (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                        (valueMap
+                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                         (valueMap
+                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                          (valueMap
+                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                           (valueMap
+                                                            (applyWindow ( arithmeticMean filterSize filterSize)) -- 50
+                                                            (valueMap
+                                                             (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                             (valueMap
+                                                              (applyWindow ( arithmeticMean filterSize filterSize))
+                                                              (valueMap
+                                                               (applyWindow ( arithmeticMean filterSize filterSize))
+                                                               (valueMap
+                                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                (valueMap
+                                                                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 55
+                                                                 (valueMap
+                                                                  (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                  (valueMap
+                                                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                   (valueMap
+                                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                    (valueMap
+                                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                     (valueMap
+                                                                      (applyWindow ( arithmeticMean filterSize filterSize)) -- 60
+                                                                      (valueMap
+                                                                       (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                       (valueMap
+                                                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                        (valueMap
+                                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                         (valueMap
+                                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                          (valueMap
+                                                                           (applyWindow ( arithmeticMean filterSize filterSize)) -- 65
+                                                                           (valueMap
+                                                                            (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                            (valueMap
+                                                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                             (valueMap
+                                                                              (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                              (valueMap
+                                                                               (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                               (valueMap
+                                                                                (applyWindow ( arithmeticMean filterSize filterSize)) -- 70
+                                                                                (valueMap
+                                                                                 (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                 (valueMap
+                                                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                  (valueMap
+                                                                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                   (valueMap
+                                                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                    (valueMap
+                                                                                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 75
+                                                                                     (valueMap
+                                                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                      (valueMap
+                                                                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                       (valueMap
+                                                                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                        (valueMap
+                                                                                         (applyWindow ( arithmeticMean filterSize filterSize)) image -- 80
+                                                                                         )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+
+do90Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 10
+                     (valueMap
+                      (applyWindow ( arithmeticMean filterSize filterSize ))
+                      (valueMap
+                       (applyWindow ( arithmeticMean filterSize filterSize))
+                       (valueMap
+                        (applyWindow ( arithmeticMean filterSize filterSize))
+                        (valueMap
+                         (applyWindow ( arithmeticMean filterSize filterSize))
+                         (valueMap
+                          (applyWindow ( arithmeticMean filterSize filterSize)) -- 15
+                          (valueMap
+                           (applyWindow ( arithmeticMean filterSize filterSize ))
+                           (valueMap
+                            (applyWindow ( arithmeticMean filterSize filterSize))
+                            (valueMap
+                             (applyWindow ( arithmeticMean filterSize filterSize))
+                             (valueMap
+                              (applyWindow ( arithmeticMean filterSize filterSize))
+                              (valueMap
+                               (applyWindow ( arithmeticMean filterSize filterSize)) -- 20
+                               (valueMap
+                                (applyWindow ( arithmeticMean filterSize filterSize ))
+                                (valueMap
+                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                 (valueMap
+                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                  (valueMap
+                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                   (valueMap
+                                    (applyWindow ( arithmeticMean filterSize filterSize)) -- 25
+                                    (valueMap
+                                     (applyWindow ( arithmeticMean filterSize filterSize ))
+                                     (valueMap
+                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                      (valueMap
+                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                       (valueMap
+                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                        (valueMap
+                                         (applyWindow ( arithmeticMean filterSize filterSize)) -- 30
+                                         (valueMap
+                                          (applyWindow ( arithmeticMean filterSize filterSize ))
+                                          (valueMap
+                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                           (valueMap
+                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                            (valueMap
+                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                             (valueMap
+                                              (applyWindow ( arithmeticMean filterSize filterSize))  -- 35
+                                              (valueMap
+                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                               (valueMap
+                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                (valueMap
+                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                 (valueMap
+                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                  (valueMap
+                                                   (applyWindow ( arithmeticMean filterSize filterSize)) -- 40
+                                                   (valueMap
+                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                    (valueMap
+                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                     (valueMap
+                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                      (valueMap
+                                                       (applyWindow ( arithmeticMean filterSize filterSize)) -- 45
+                                                       (valueMap
+                                                        (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                        (valueMap
+                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                         (valueMap
+                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                          (valueMap
+                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                           (valueMap
+                                                            (applyWindow ( arithmeticMean filterSize filterSize)) -- 50
+                                                            (valueMap
+                                                             (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                             (valueMap
+                                                              (applyWindow ( arithmeticMean filterSize filterSize))
+                                                              (valueMap
+                                                               (applyWindow ( arithmeticMean filterSize filterSize))
+                                                               (valueMap
+                                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                (valueMap
+                                                                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 55
+                                                                 (valueMap
+                                                                  (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                  (valueMap
+                                                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                   (valueMap
+                                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                    (valueMap
+                                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                     (valueMap
+                                                                      (applyWindow ( arithmeticMean filterSize filterSize)) -- 60
+                                                                      (valueMap
+                                                                       (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                       (valueMap
+                                                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                        (valueMap
+                                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                         (valueMap
+                                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                          (valueMap
+                                                                           (applyWindow ( arithmeticMean filterSize filterSize)) -- 65
+                                                                           (valueMap
+                                                                            (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                            (valueMap
+                                                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                             (valueMap
+                                                                              (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                              (valueMap
+                                                                               (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                               (valueMap
+                                                                                (applyWindow ( arithmeticMean filterSize filterSize)) -- 70
+                                                                                (valueMap
+                                                                                 (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                 (valueMap
+                                                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                  (valueMap
+                                                                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                   (valueMap
+                                                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                    (valueMap
+                                                                                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 75
+                                                                                     (valueMap
+                                                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                      (valueMap
+                                                                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                       (valueMap
+                                                                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                        (valueMap
+                                                                                         (applyWindow ( arithmeticMean filterSize filterSize)) -- 80
+                                                                                         (valueMap
+                                                                                          (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                          (valueMap
+                                                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                           (valueMap
+                                                                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                            (valueMap
+                                                                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                             (valueMap
+                                                                                              (applyWindow ( arithmeticMean filterSize filterSize)) -- 85
+                                                                                              (valueMap
+                                                                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                               (valueMap
+                                                                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                (valueMap
+                                                                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                 (valueMap
+                                                                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                  (valueMap
+                                                                                                   (applyWindow ( arithmeticMean filterSize filterSize)) image -- 90
+                                                                                                   )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+do100Avg image =
+          let filterSize = 3
+          in writeImage "do125Avg.bmp" $
+            (valueMap
+             (applyWindow ( arithmeticMean filterSize filterSize ))
+             (valueMap
+              (applyWindow ( arithmeticMean filterSize filterSize))
+              (valueMap
+               (applyWindow ( arithmeticMean filterSize filterSize))
+               (valueMap
+                (applyWindow ( arithmeticMean filterSize filterSize))
+                (valueMap
+                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 5
+                 (valueMap
+                  (applyWindow ( arithmeticMean filterSize filterSize))
+                  (valueMap
+                   (applyWindow ( arithmeticMean filterSize filterSize))
+                   (valueMap
+                    (applyWindow ( arithmeticMean filterSize filterSize))
+                    (valueMap
+                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 10
+                     (valueMap
+                      (applyWindow ( arithmeticMean filterSize filterSize ))
+                      (valueMap
+                       (applyWindow ( arithmeticMean filterSize filterSize))
+                       (valueMap
+                        (applyWindow ( arithmeticMean filterSize filterSize))
+                        (valueMap
+                         (applyWindow ( arithmeticMean filterSize filterSize))
+                         (valueMap
+                          (applyWindow ( arithmeticMean filterSize filterSize)) -- 15
+                          (valueMap
+                           (applyWindow ( arithmeticMean filterSize filterSize ))
+                           (valueMap
+                            (applyWindow ( arithmeticMean filterSize filterSize))
+                            (valueMap
+                             (applyWindow ( arithmeticMean filterSize filterSize))
+                             (valueMap
+                              (applyWindow ( arithmeticMean filterSize filterSize))
+                              (valueMap
+                               (applyWindow ( arithmeticMean filterSize filterSize)) -- 20
+                               (valueMap
+                                (applyWindow ( arithmeticMean filterSize filterSize ))
+                                (valueMap
+                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                 (valueMap
+                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                  (valueMap
+                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                   (valueMap
+                                    (applyWindow ( arithmeticMean filterSize filterSize)) -- 25
+                                    (valueMap
+                                     (applyWindow ( arithmeticMean filterSize filterSize ))
+                                     (valueMap
+                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                      (valueMap
+                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                       (valueMap
+                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                        (valueMap
+                                         (applyWindow ( arithmeticMean filterSize filterSize)) -- 30
+                                         (valueMap
+                                          (applyWindow ( arithmeticMean filterSize filterSize ))
+                                          (valueMap
+                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                           (valueMap
+                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                            (valueMap
+                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                             (valueMap
+                                              (applyWindow ( arithmeticMean filterSize filterSize))  -- 35
+                                              (valueMap
+                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                               (valueMap
+                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                (valueMap
+                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                 (valueMap
+                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                  (valueMap
+                                                   (applyWindow ( arithmeticMean filterSize filterSize)) -- 40
+                                                   (valueMap
+                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                    (valueMap
+                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                     (valueMap
+                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                      (valueMap
+                                                       (applyWindow ( arithmeticMean filterSize filterSize)) -- 45
+                                                       (valueMap
+                                                        (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                        (valueMap
+                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                         (valueMap
+                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                          (valueMap
+                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                           (valueMap
+                                                            (applyWindow ( arithmeticMean filterSize filterSize)) -- 50
+                                                            (valueMap
+                                                             (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                             (valueMap
+                                                              (applyWindow ( arithmeticMean filterSize filterSize))
+                                                              (valueMap
+                                                               (applyWindow ( arithmeticMean filterSize filterSize))
+                                                               (valueMap
+                                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                (valueMap
+                                                                 (applyWindow ( arithmeticMean filterSize filterSize)) -- 55
+                                                                 (valueMap
+                                                                  (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                  (valueMap
+                                                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                   (valueMap
+                                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                    (valueMap
+                                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                     (valueMap
+                                                                      (applyWindow ( arithmeticMean filterSize filterSize)) -- 60
+                                                                      (valueMap
+                                                                       (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                       (valueMap
+                                                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                        (valueMap
+                                                                         (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                         (valueMap
+                                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                          (valueMap
+                                                                           (applyWindow ( arithmeticMean filterSize filterSize)) -- 65
+                                                                           (valueMap
+                                                                            (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                            (valueMap
+                                                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                             (valueMap
+                                                                              (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                              (valueMap
+                                                                               (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                               (valueMap
+                                                                                (applyWindow ( arithmeticMean filterSize filterSize)) -- 70
+                                                                                (valueMap
+                                                                                 (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                 (valueMap
+                                                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                  (valueMap
+                                                                                   (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                   (valueMap
+                                                                                    (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                    (valueMap
+                                                                                     (applyWindow ( arithmeticMean filterSize filterSize)) -- 75
+                                                                                     (valueMap
+                                                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                      (valueMap
+                                                                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                       (valueMap
+                                                                                        (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                        (valueMap
+                                                                                         (applyWindow ( arithmeticMean filterSize filterSize)) -- 80
+                                                                                         (valueMap
+                                                                                          (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                          (valueMap
+                                                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                           (valueMap
+                                                                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                            (valueMap
+                                                                                             (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                             (valueMap
+                                                                                              (applyWindow ( arithmeticMean filterSize filterSize)) -- 85
+                                                                                              (valueMap
+                                                                                               (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                               (valueMap
+                                                                                                (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                (valueMap
+                                                                                                 (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                 (valueMap
+                                                                                                  (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                  (valueMap
+                                                                                                   (applyWindow ( arithmeticMean filterSize filterSize)) -- 90
+                                                                                                   (valueMap
+                                                                                                    (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                                    (valueMap
+                                                                                                     (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                     (valueMap
+                                                                                                      (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                      (valueMap
+                                                                                                       (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                       (valueMap
+                                                                                                        (applyWindow ( arithmeticMean filterSize filterSize)) -- 95
+                                                                                                        (valueMap
+                                                                                                         (applyWindow ( arithmeticMean filterSize filterSize ))
+                                                                                                         (valueMap
+                                                                                                          (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                          (valueMap
+                                                                                                           (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                           (valueMap
+                                                                                                            (applyWindow ( arithmeticMean filterSize filterSize))
+                                                                                                            (valueMap
+                                                                                                             (applyWindow ( arithmeticMean filterSize filterSize)) image -- 100
+                                                                                                             )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+
 do125Avg image =
           let filterSize = 3
           in writeImage "do125Avg.bmp" $
