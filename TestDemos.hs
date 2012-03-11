@@ -34,6 +34,7 @@ import Data.Word
 --       Just myImage -> let resultImage = unSharpMask 1 myImage
 --                       in writeImage "sharpeningDemo.bmp" resultImage
 
+main = histogramEqDemo
 
 smoothingDemo =
   do inputImage <- loadImage "lena.bmp"
@@ -56,16 +57,11 @@ histogramEqDemo =
                                myImage
                        in writeImage "FullHistEq.bmp" resultImage
 
-
-
-
--- Normalized hist should be adjusted so that minCount is subtracted from the numerator and
--- denominator.  See Wikipedia
+--Normalized hist should be adjusted so that minCount is subtracted from the numerator and
+--denominator.  See Wikipedia
 fullHistogramEq :: forall e. (Enum e, Ix e, Integral e,Num e, IArray UArray e) => Int -> Int -> UArray (Int,Int) e-> UArray (Int, Int) e
 fullHistogramEq width height inputArray =
-  let histogramArray =  (hist
-                         (0,255)
-                         (Data.Array.Unboxed.elems inputArray ))
+  let histogramArray =  hist (0,255) (Data.Array.Unboxed.elems inputArray )
       summedHist = Data.Array.array
                    (0,255) --(bounds histogramArray)
                    (zip [0..255] $  scanl1 (+) (Data.Array.elems histogramArray))
@@ -73,13 +69,10 @@ fullHistogramEq width height inputArray =
       normalizedHist = fmap
                        (\x -> (255 * (fromIntegral (x) ) `div` ((width*height )  )))
                        summedHist
-      final = (amap
-              (\x -> (floor ( fromIntegral(normalizedHist Data.Array.! x)))     )
-              inputArray)
+  in Data.Array.Unboxed.array
+     ((0,0), (width-1, height-1))
+     [((i,j), normalizedHist `seq` fromIntegral(normalizedHist Data.Array.! (inputArray Data.Array.Unboxed.! (i,j))) ) | i <- [1..width-1], j <- [1..height-1]]
 
-  in final
-
---hist            :: (Ix a, Integral b) => (a,a) -> [a] -> UArray a b
 hist bnds is    =  Data.Array.accumArray (+) 0 bnds [(i, 1) | i <- is, inRange bnds i]
 
 minNotZero [] = 0

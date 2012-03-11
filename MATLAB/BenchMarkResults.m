@@ -16,9 +16,9 @@ errorbar(numIterations, FIPlib, FIPerr,'-*');
 plot(numIterations,C.*1000, '-x');
 hold off
 legend('FIPlib', 'C')
-title('Computation Time for Succesive Window Filters')
-xlabel('Number of filters applied')
-ylabel('Computation time (ms)')
+title('Execution Time for Succesive Window Filters')
+xlabel('number of filters applied')
+ylabel('execution time (ms)')
 
 
 
