@@ -66,12 +66,9 @@ fullHistogramEq width height inputArray =
                    (0,255) --(bounds histogramArray)
                    (zip [0..255] $  scanl1 (+) (Data.Array.elems histogramArray))
       minCount = minNotZero (Data.Array.elems summedHist)
-      normalizedHist = fmap
-                       (\x -> (255 * (fromIntegral (x) ) `div` ((width*height )  )))
-                       summedHist
-  in Data.Array.Unboxed.array
-     ((0,0), (width-1, height-1))
-     [((i,j), normalizedHist `seq` fromIntegral(normalizedHist Data.Array.! (inputArray Data.Array.Unboxed.! (i,j))) ) | i <- [1..width-1], j <- [1..height-1]]
+      normalizedHist = fmap (\x -> (255 * (fromIntegral (x) ) `div` ((width*height )  ))) summedHist
+  in Data.Array.Unboxed.array ((0,0), (width-1, height-1))
+     [((i,j), fromIntegral(normalizedHist Data.Array.! (inputArray Data.Array.Unboxed.! (i,j))) ) | i <- [1..width-1], j <- [1..height-1]]
 
 hist bnds is    =  Data.Array.accumArray (+) 0 bnds [(i, 1) | i <- is, inRange bnds i]
 
